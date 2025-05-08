@@ -9,8 +9,9 @@ import {
   MovieDetails, 
   Person, 
   PersonDetails, 
-  PersonMovieCredits 
-} from './types';
+  PersonMovieCredits,
+  Genre
+} from '../types';
 
 // Helper function to build URLs with API key
 const buildUrl = (endpoint: string, queryParams: Record<string, string> = {}) => {
@@ -97,13 +98,16 @@ export const moviesAPI = {
       buildUrl('/search/movie', { query, page: page.toString() })
     ),
     
-  // Get movies by genre
+    // Get movies by genre
   getMoviesByGenre: (genreId: number, page = 1) => 
     fetcher<APIResponse<Movie>>(
-      buildUrl('/discover/movie', { 
-        with_genres: genreId.toString(), 
-        page: page.toString() 
-      })
+      buildUrl('/discover/movie', { with_genres: genreId.toString(), page: page.toString() })
+    ),
+    
+  // Get all genres
+  getGenres: () => 
+    fetcher<{genres: Genre[]}>(
+      buildUrl('/genre/movie/list')
     ),
 };
 

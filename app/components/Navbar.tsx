@@ -5,13 +5,12 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useLogout } from "@/app/hooks/useAuth";
 import { useAuthStore } from "@/app/store/authStore";
-import { useUIStore } from "@/app/store/uiStore";
 import SearchBar from "./SearchBar";
+import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const pathname = usePathname();
   const { user, isAuthenticated } = useAuthStore();
-  const { toggleSidebar } = useUIStore();
   const logout = useLogout();
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -30,47 +29,26 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 w-full z-50 px-4 md:px-6 py-4 flex items-center justify-between transition-colors duration-300 ${
+      className={`fixed top-0 w-full z-50 px-4 md:px-6 py-3 flex items-center justify-between transition-colors duration-300 ${
         isScrolled
-          ? "bg-black bg-opacity-90"
-          : "bg-gradient-to-b from-black/80 to-transparent"
+          ? "bg-background/90 backdrop-blur-sm border-b border-border"
+          : "bg-gradient-to-b from-background/90 to-transparent"
       }`}
     >
-      <div className="flex items-center gap-4">
-        <button
-          onClick={toggleSidebar}
-          className="text-white p-2 rounded-full hover:bg-white/10 transition lg:hidden"
-          aria-label="Toggle sidebar"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-            />
-          </svg>
-        </button>
-
+      <div className="flex items-center gap-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-red-600 font-bold text-2xl">LianoFlix</span>
+          <span className="text-primary font-bold text-2xl">LianoFlix</span>
         </Link>
 
-        <div className="hidden md:flex items-center space-x-6 ml-10">
+        <div className="hidden md:flex items-center space-x-6">
           <NavLink href="/" label="Home" active={pathname === "/"} />
           <NavLink
-            href="/movies"
+            href="/movies/popular"
             label="Movies"
             active={pathname.includes("/movies")}
           />
           <NavLink
-            href="/actors"
+            href="/actors/popular"
             label="Actors"
             active={pathname.includes("/actors")}
           />
@@ -86,7 +64,7 @@ const Navbar = () => {
           <div className="flex items-center gap-4">
             <div className="relative group">
               <button className="flex items-center gap-2 focus:outline-none">
-                <div className="w-8 h-8 rounded-full bg-neutral-700 flex items-center justify-center overflow-hidden">
+                <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center overflow-hidden">
                   {user?.email ? (
                     <span className="uppercase text-sm font-bold">
                       {user.email.charAt(0)}
@@ -124,14 +102,14 @@ const Navbar = () => {
                 </svg>
               </button>
 
-              <div className="absolute right-0 mt-2 w-48 bg-neutral-900 rounded-md shadow-lg overflow-hidden z-50 scale-0 origin-top-right group-hover:scale-100 transition-transform duration-200">
+              <div className="absolute right-0 mt-2 w-48 bg-card rounded-md shadow-lg overflow-hidden z-50 scale-0 origin-top-right group-hover:scale-100 transition-transform duration-200 border border-border">
                 <div className="py-1">
-                  <div className="px-4 py-2 text-sm text-gray-300 border-b border-neutral-800">
+                  <div className="px-4 py-2 text-sm text-muted-foreground border-b border-border">
                     {user?.email}
                   </div>
                   <button
                     onClick={() => logout.mutate()}
-                    className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-neutral-800 transition"
+                    className="block w-full text-left px-4 py-2 text-sm text-foreground hover:bg-accent transition"
                   >
                     Sign Out
                   </button>
@@ -141,18 +119,12 @@ const Navbar = () => {
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            <Link
-              href="/auth/login"
-              className="px-4 py-2 text-sm text-white hover:bg-white/10 rounded transition"
-            >
-              Login
-            </Link>
-            <Link
-              href="/auth/signup"
-              className="px-4 py-2 text-sm bg-red-600 hover:bg-red-700 text-white rounded transition"
-            >
-              Sign Up
-            </Link>
+            <Button variant="ghost" size="sm" asChild>
+              <Link href="/auth/login">Login</Link>
+            </Button>
+            <Button size="sm" asChild>
+              <Link href="/auth/signup">Sign Up</Link>
+            </Button>
           </div>
         )}
       </div>
@@ -174,7 +146,7 @@ const NavLink = ({
     <Link
       href={href}
       className={`text-sm font-medium transition ${
-        active ? "text-white" : "text-gray-300 hover:text-white"
+        active ? "text-foreground" : "text-muted-foreground hover:text-foreground"
       }`}
     >
       {label}
