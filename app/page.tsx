@@ -133,29 +133,31 @@ export default function Home() {
         <FeaturedMovie />
       </Suspense>
 
-      <div className="container mx-auto px-4 -mt-16 relative z-10">
-        {/* Movie Carousels */}
-        <div className="max-w-screen-2xl mx-auto">
-          <Suspense fallback={<CarouselSkeleton />}>
-            <TrendingMoviesCarousel />
-          </Suspense>
+      {/* Movie Carousels - Adaptive positioning with smaller negative margin on mobile */}
+      <div className="relative z-10 -mt-8 sm:-mt-12 md:-mt-16 lg:-mt-20">
+        <div className="container mx-auto px-3 sm:px-4 md:px-6">
+          <div className="max-w-screen-2xl mx-auto">
+            <Suspense fallback={<CarouselSkeleton />}>
+              <TrendingMoviesCarousel />
+            </Suspense>
 
-          <Suspense fallback={<CarouselSkeleton />}>
-            <PopularMoviesCarousel />
-          </Suspense>
+            <Suspense fallback={<CarouselSkeleton />}>
+              <PopularMoviesCarousel />
+            </Suspense>
 
-          <Suspense fallback={<CarouselSkeleton />}>
-            <TopRatedMoviesCarousel />
-          </Suspense>
+            <Suspense fallback={<CarouselSkeleton />}>
+              <TopRatedMoviesCarousel />
+            </Suspense>
 
-          <Suspense fallback={<CarouselSkeleton />}>
-            <UpcomingMoviesCarousel />
-          </Suspense>
-          
-          {/* Genre-specific Carousels */}
-          <Suspense fallback={<CarouselSkeleton />}>
-            <GenreCarousels />
-          </Suspense>
+            <Suspense fallback={<CarouselSkeleton />}>
+              <UpcomingMoviesCarousel />
+            </Suspense>
+            
+            {/* Genre-specific Carousels */}
+            <Suspense fallback={<CarouselSkeleton />}>
+              <GenreCarousels />
+            </Suspense>
+          </div>
         </div>
       </div>
     </div>

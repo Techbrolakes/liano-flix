@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
-import { Movie } from '@/app/lib/types';
-import { getBackdropUrl } from '@/app/lib/tmdb';
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { Movie } from "@/app/types";
+import { getBackdropUrl, getPosterUrl } from "@/app/lib/tmdb";
 
 interface HeroSectionProps {
   movie: Movie;
@@ -15,53 +15,84 @@ export const HeroSection = ({ movie }: HeroSectionProps) => {
 
   // Format date to show month and year
   const releaseDate = movie.release_date
-    ? new Date(movie.release_date).toLocaleDateString('en-US', {
-        month: 'long',
-        year: 'numeric',
+    ? new Date(movie.release_date).toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric",
       })
-    : '';
+    : "";
 
-  // Truncate overview if it's too long
-  const truncatedOverview =
-    movie.overview.length > 200
-      ? `${movie.overview.substring(0, 200)}...`
+  // Different overview lengths for different screen sizes
+  const shortOverview =
+    movie.overview.length > 80
+      ? `${movie.overview.substring(0, 80)}...`
+      : movie.overview;
+
+  const mediumOverview =
+    movie.overview.length > 150
+      ? `${movie.overview.substring(0, 150)}...`
+      : movie.overview;
+
+  const fullOverview =
+    movie.overview.length > 240
+      ? `${movie.overview.substring(0, 240)}...`
       : movie.overview;
 
   return (
-    <div className="relative w-full h-[75vh] max-h-[800px] overflow-hidden">
-      {/* Backdrop image */}
-      <div className="absolute inset-0 bg-neutral-900">
+    <div className="relative w-full h-[60vh] sm:h-[65vh] md:h-[70vh] lg:h-[75vh] max-h-[800px] overflow-hidden">
+      {/* Mobile: Poster image (hidden on larger screens) */}
+      <div className="absolute inset-0 bg-neutral-900 md:hidden">
         <Image
-          src={getBackdropUrl(movie.backdrop_path, 'original')}
+          src={getPosterUrl(movie.poster_path, "large")}
           alt={movie.title}
           fill
           priority
-          className={`object-cover object-center opacity-70 transition-opacity duration-700 ${
-            isImageLoaded ? 'opacity-70' : 'opacity-0'
+          sizes="100vw"
+          className={`object-cover object-center opacity-80 transition-opacity duration-700 ${
+            isImageLoaded ? "opacity-80" : "opacity-0"
           }`}
           onLoad={() => setIsImageLoaded(true)}
         />
-        
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 to-transparent" />
+
+        {/* Gradient overlays for mobile */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/40" />
+      </div>
+
+      {/* Larger screens: Backdrop image (hidden on mobile) */}
+      <div className="absolute inset-0 bg-neutral-900 hidden md:block">
+        <Image
+          src={getBackdropUrl(movie.backdrop_path, "original")}
+          alt={movie.title}
+          fill
+          priority
+          sizes="100vw"
+          className={`object-cover object-[center_20%] opacity-70 transition-opacity duration-700 ${
+            isImageLoaded ? "opacity-70" : "opacity-0"
+          }`}
+        />
+
+        {/* Gradient overlays for larger screens */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent" />
       </div>
 
       {/* Content */}
-      <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 lg:p-16">
-        <div className="max-w-2xl">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3">
+      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-10 lg:p-16">
+        <div className="max-w-xs sm:max-w-sm md:max-w-xl lg:max-w-2xl mx-auto md:mx-0">
+          {" "}
+          {/* Center on mobile, left-align on larger screens */}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2 md:mb-3 line-clamp-2 md:line-clamp-none">
             {movie.title}
           </h1>
-          
-          <div className="flex items-center gap-4 mb-4">
-            <span className="text-neutral-300 text-sm">{releaseDate}</span>
+          <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-3 md:mb-4">
+            <span className="text-neutral-300 text-xs sm:text-sm">
+              {releaseDate}
+            </span>
             <div className="flex items-center gap-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="w-4 h-4 text-amber-400"
+                className="w-3 h-3 sm:w-4 sm:h-4 text-amber-400"
               >
                 <path
                   fillRule="evenodd"
@@ -69,26 +100,44 @@ export const HeroSection = ({ movie }: HeroSectionProps) => {
                   clipRule="evenodd"
                 />
               </svg>
-              <span className="text-amber-400 font-medium">
+              <span className="text-amber-400 text-xs sm:text-sm font-medium">
                 {movie.vote_average.toFixed(1)}
               </span>
             </div>
           </div>
+          {/* Overview with responsive styling and better mobile presentation */}
+          <div className="mb-4 sm:mb-6">
+            {/* Mobile overview - shortest version with improved styling */}
+            <div className="md:hidden">
+              <p className="text-neutral-300 text-sm leading-snug font-medium p-2 px-3 bg-black/30 backdrop-blur-sm rounded-md">
+                {shortOverview}
+              </p>
+            </div>
 
-          <p className="text-neutral-300 mb-6 max-w-xl hidden md:block">
-            {truncatedOverview}
-          </p>
+            {/* Tablet overview */}
+            <div className="hidden sm:block md:hidden">
+              <p className="text-neutral-300 text-sm leading-relaxed p-2 px-3 bg-black/20 backdrop-blur-sm rounded-md">
+                {mediumOverview}
+              </p>
+            </div>
 
-          <div className="flex flex-wrap gap-3">
+            {/* Desktop overview */}
+            <div className="hidden md:block">
+              <p className="text-neutral-300 text-base max-w-xl">
+                {fullOverview}
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2 sm:gap-3">
             <Link
               href={`/movies/${movie.id}`}
-              className="px-6 py-3 bg-red-600 hover:bg-red-700 transition text-white font-medium rounded-md flex items-center gap-2"
+              className="px-4 sm:px-6 py-2 sm:py-3 bg-red-600 hover:bg-red-700 transition text-white text-sm sm:text-base font-medium rounded-md flex items-center gap-1 sm:gap-2"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="w-5 h-5"
+                className="w-4 h-4 sm:w-5 sm:h-5"
               >
                 <path
                   fillRule="evenodd"
@@ -100,7 +149,7 @@ export const HeroSection = ({ movie }: HeroSectionProps) => {
             </Link>
             <Link
               href={`/movies/${movie.id}`}
-              className="px-6 py-3 bg-neutral-700 hover:bg-neutral-600 transition text-white font-medium rounded-md flex items-center gap-2"
+              className="px-4 sm:px-6 py-2 sm:py-3 bg-neutral-700 hover:bg-neutral-600 transition text-white text-sm sm:text-base font-medium rounded-md flex items-center gap-1 sm:gap-2"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -108,7 +157,7 @@ export const HeroSection = ({ movie }: HeroSectionProps) => {
                 viewBox="0 0 24 24"
                 strokeWidth={2}
                 stroke="currentColor"
-                className="w-5 h-5"
+                className="w-4 h-4 sm:w-5 sm:h-5"
               >
                 <path
                   strokeLinecap="round"
