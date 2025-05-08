@@ -1,11 +1,13 @@
-import { Suspense } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { MovieRow } from '@/app/components/MovieRow';
-import { MovieCredits, MovieDetails } from '@/app/lib/types';
-import { getBackdropUrl, getPosterUrl, getProfileUrl } from '@/app/lib/tmdb';
-import { moviesAPI } from '@/app/lib/api';
+import { Suspense } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { MovieRow } from "@/app/components/MovieRow";
+import { CastCarousel } from "@/app/components/CastCarousel";
+import { MovieCredits, MovieDetails } from "@/app/types";
+import { getBackdropUrl, getPosterUrl } from "@/app/lib/tmdb";
+import { moviesAPI } from "@/app/lib/api";
+import { MovieInfoSkeleton, MovieCastSkeleton, SimilarMoviesSkeleton } from "@/app/components/skeletons/MovieDetailsSkeleton";
 
 async function getMovieDetails(id: number): Promise<MovieDetails> {
   try {
@@ -38,35 +40,38 @@ async function getSimilarMovies(id: number) {
 async function MovieInfo({ id }: { id: number }) {
   try {
     const movie = await getMovieDetails(id);
-    
+
     // Format runtime to hours and minutes
     const hours = Math.floor(movie.runtime / 60);
     const minutes = movie.runtime % 60;
     const formattedRuntime = `${hours}h ${minutes}m`;
-    
+
     // Format release date
-    const releaseDate = new Date(movie.release_date).toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
-    });
-    
+    const releaseDate = new Date(movie.release_date).toLocaleDateString(
+      "en-US",
+      {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      }
+    );
+
     // Format budget and revenue
     const formatCurrency = (amount: number) => {
-      if (amount === 0) return 'N/A';
-      return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
+      if (amount === 0) return "N/A";
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
         maximumFractionDigits: 0,
       }).format(amount);
     };
-    
+
     return (
       <div className="relative">
         {/* Backdrop with gradient overlay */}
         <div className="absolute inset-0 -z-10 opacity-40">
           <Image
-            src={getBackdropUrl(movie.backdrop_path, 'original')}
+            src={getBackdropUrl(movie.backdrop_path, "original")}
             alt={movie.title}
             fill
             className="object-cover"
@@ -74,14 +79,14 @@ async function MovieInfo({ id }: { id: number }) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
         </div>
-        
+
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row gap-8">
             {/* Movie poster */}
             <div className="w-full max-w-[300px] mx-auto md:mx-0">
               <div className="relative aspect-[2/3] overflow-hidden rounded-lg shadow-xl">
                 <Image
-                  src={getPosterUrl(movie.poster_path, 'large')}
+                  src={getPosterUrl(movie.poster_path, "large")}
                   alt={movie.title}
                   fill
                   className="object-cover"
@@ -89,17 +94,17 @@ async function MovieInfo({ id }: { id: number }) {
                 />
               </div>
             </div>
-            
+
             {/* Movie details */}
             <div className="flex-1">
               <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
                 {movie.title}
               </h1>
-              
+
               {movie.tagline && (
                 <p className="text-neutral-400 italic mb-4">{movie.tagline}</p>
               )}
-              
+
               <div className="flex flex-wrap gap-2 mb-4">
                 {movie.genres.map((genre) => (
                   <Link
@@ -111,7 +116,7 @@ async function MovieInfo({ id }: { id: number }) {
                   </Link>
                 ))}
               </div>
-              
+
               <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-neutral-300 mb-6">
                 <div className="flex items-center gap-1">
                   <svg
@@ -126,7 +131,9 @@ async function MovieInfo({ id }: { id: number }) {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span className="font-medium">{movie.vote_average.toFixed(1)}</span>
+                  <span className="font-medium">
+                    {movie.vote_average.toFixed(1)}
+                  </span>
                 </div>
                 <span>|</span>
                 <div>{formattedRuntime}</div>
@@ -135,33 +142,34 @@ async function MovieInfo({ id }: { id: number }) {
                 <span>|</span>
                 <div>{movie.original_language.toUpperCase()}</div>
               </div>
-              
+
               <div className="mb-6">
-                <h2 className="text-xl font-medium text-white mb-2">Overview</h2>
+                <h2 className="text-xl font-medium text-white mb-2">
+                  Overview
+                </h2>
                 <p className="text-neutral-300">{movie.overview}</p>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                  <h2 className="text-xl font-medium text-white mb-2">Details</h2>
+                  <h2 className="text-xl font-medium text-white mb-2">
+                    Details
+                  </h2>
                   <dl className="grid grid-cols-[120px_1fr] gap-y-2 text-sm">
                     <dt className="text-neutral-400">Status</dt>
                     <dd className="text-white">{movie.status}</dd>
-                    
+
                     <dt className="text-neutral-400">Budget</dt>
-                    <dd className="text-white">{formatCurrency(movie.budget)}</dd>
-                    
+                    <dd className="text-white">
+                      {formatCurrency(movie.budget)}
+                    </dd>
+
                     <dt className="text-neutral-400">Revenue</dt>
-                    <dd className="text-white">{formatCurrency(movie.revenue)}</dd>
-                    
-                    {movie.production_companies.length > 0 && (
-                      <>
-                        <dt className="text-neutral-400">Studios</dt>
-                        <dd className="text-white">
-                          {movie.production_companies.map(company => company.name).join(', ')}
-                        </dd>
-                      </>
-                    )}
+                    <dd className="text-white">
+                      {formatCurrency(movie.revenue)}
+                    </dd>
+
+                    {/* Studios section removed as production_companies property is not available in the current MovieDetails type */}
                   </dl>
                 </div>
               </div>
@@ -179,39 +187,15 @@ async function MovieInfo({ id }: { id: number }) {
 async function MovieCastSection({ id }: { id: number }) {
   try {
     const credits = await getMovieCredits(id);
-    const cast = credits.cast.slice(0, 12); // Limit to top 12 cast members
-    
+    const cast = credits.cast.slice(0, 20); // Get more cast members for the carousel
+
     if (cast.length === 0) {
       return null;
     }
-    
+
     return (
-      <div className="container mx-auto px-4 py-8">
-        <h2 className="text-2xl font-medium text-white mb-4">Cast</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {cast.map((person) => (
-            <Link
-              key={person.id}
-              href={`/actors/${person.id}`}
-              className="group"
-            >
-              <div className="aspect-[2/3] relative overflow-hidden rounded-md bg-neutral-800 mb-2">
-                <Image
-                  src={getProfileUrl(person.profile_path, 'medium')}
-                  alt={person.name}
-                  fill
-                  className="object-cover group-hover:scale-105 transition duration-300"
-                />
-              </div>
-              <h3 className="text-sm font-medium text-white group-hover:text-red-500 transition line-clamp-1">
-                {person.name}
-              </h3>
-              <p className="text-xs text-neutral-400 line-clamp-1">
-                {person.character}
-              </p>
-            </Link>
-          ))}
-        </div>
+      <div className="container mx-auto">
+        <CastCarousel title="Cast" cast={cast} />
       </div>
     );
   } catch (error) {
@@ -222,11 +206,11 @@ async function MovieCastSection({ id }: { id: number }) {
 
 async function SimilarMoviesSection({ id }: { id: number }) {
   const similarMovies = await getSimilarMovies(id);
-  
+
   if (similarMovies.length === 0) {
     return null;
   }
-  
+
   return (
     <div className="container mx-auto px-4 py-8">
       <MovieRow
@@ -240,22 +224,28 @@ async function SimilarMoviesSection({ id }: { id: number }) {
 
 export default function MoviePage({ params }: { params: { id: string } }) {
   const movieId = parseInt(params.id, 10);
-  
+
   if (isNaN(movieId)) {
     notFound();
   }
-  
+
   return (
     <div className="pb-10 pt-16">
-      <Suspense fallback={<div className="w-full h-[50vh] bg-neutral-900 animate-pulse" />}>
+      <Suspense
+        fallback={<MovieInfoSkeleton />}
+      >
         <MovieInfo id={movieId} />
       </Suspense>
-      
-      <Suspense fallback={<div className="container mx-auto px-4 py-8"><div className="h-40 bg-neutral-900 animate-pulse rounded-md" /></div>}>
+
+      <Suspense
+        fallback={<MovieCastSkeleton />}
+      >
         <MovieCastSection id={movieId} />
       </Suspense>
-      
-      <Suspense fallback={<div className="container mx-auto px-4 py-8"><div className="h-60 bg-neutral-900 animate-pulse rounded-md" /></div>}>
+
+      <Suspense
+        fallback={<SimilarMoviesSkeleton />}
+      >
         <SimilarMoviesSection id={movieId} />
       </Suspense>
     </div>

@@ -1,10 +1,11 @@
 import { Suspense } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { PersonDetails, MovieCast } from '@/app/lib/types';
-import { getProfileUrl, getPosterUrl } from '@/app/lib/tmdb';
+import { getProfileUrl } from '@/app/lib/tmdb';
 import { peopleAPI } from '@/app/lib/api';
+import { MovieCarousel } from '@/app/components/MovieCarousel';
+import { ActorInfoSkeleton, ActorFilmographySkeleton } from '@/app/components/skeletons/ActorDetailsSkeleton';
+import { Movie, PersonDetails } from '@/app/types';
 
 async function getPersonDetails(id: number): Promise<PersonDetails> {
   try {
@@ -15,13 +16,16 @@ async function getPersonDetails(id: number): Promise<PersonDetails> {
   }
 }
 
-async function getPersonMovieCredits(id: number): Promise<MovieCast[]> {
+async function getPersonMovieCredits(id: number) {
   try {
     const data = await peopleAPI.getPersonMovieCredits(id);
-    // Sort by popularity and filter out movies without release dates
+    // Filter out movies without release dates and sort by release date (newest first)
     return data.cast
       .filter(movie => movie.release_date)
-      .sort((a, b) => b.popularity - a.popularity);
+      .sort((a, b) => {
+        // Sort by release date (newest first)
+        return new Date(b.release_date).getTime() - new Date(a.release_date).getTime();
+      });
   } catch (error) {
     console.error(`Error fetching person movie credits for id ${id}:`, error);
     return [];
@@ -160,36 +164,31 @@ async function ActorFilmography({ id }: { id: number }) {
       );
     }
     
+    // Create Movie objects from cast data for the carousel
+    // We need to add the missing properties required by the Movie interface
+    const mappedMovies: Movie[] = movies.map(movie => ({
+      id: movie.id,
+      title: movie.title,
+      poster_path: movie.poster_path || '',
+      backdrop_path: '', // Not in the PersonMovieCredits type, set a default
+      overview: '', // Not in the PersonMovieCredits type, set a default
+      release_date: movie.release_date,
+      vote_average: 0, // Not in the PersonMovieCredits type, set a default
+      vote_count: 0, // Not in the PersonMovieCredits type, set a default
+      popularity: 0, // Not in the PersonMovieCredits type, set a default
+      genre_ids: [], // Not in the PersonMovieCredits type, set a default
+      original_language: 'en', // Not in the PersonMovieCredits type, set a default
+      adult: false, // Not in the PersonMovieCredits type, set a default
+      video: false, // Not in the PersonMovieCredits type, set a default
+      original_title: movie.title // Required for some components
+    }));
+
     return (
-      <div className="container mx-auto px-4 py-8">
-        <h2 className="text-2xl font-medium text-white mb-4">Filmography</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-          {movies.map((movie) => (
-            <Link
-              key={movie.id}
-              href={`/movies/${movie.id}`}
-              className="group"
-            >
-              <div className="aspect-[2/3] relative overflow-hidden rounded-md bg-neutral-800 mb-2">
-                <Image
-                  src={getPosterUrl(movie.poster_path, 'medium')}
-                  alt={movie.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition duration-300"
-                />
-              </div>
-              <h3 className="text-sm font-medium text-white group-hover:text-red-500 transition line-clamp-1">
-                {movie.title}
-              </h3>
-              <div className="flex justify-between text-xs text-neutral-400">
-                <p>{new Date(movie.release_date).getFullYear()}</p>
-                <p className="text-neutral-300 italic line-clamp-1">
-                  {movie.character}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
+      <div className="container mx-auto">
+        <MovieCarousel 
+          title="Filmography" 
+          movies={mappedMovies}
+        />
       </div>
     );
   } catch (error) {
@@ -207,11 +206,11 @@ export default function ActorPage({ params }: { params: { id: string } }) {
   
   return (
     <div className="pb-10 pt-24">
-      <Suspense fallback={<div className="container mx-auto px-4 py-8"><div className="h-[50vh] bg-neutral-900 animate-pulse rounded-md" /></div>}>
+      <Suspense fallback={<ActorInfoSkeleton />}>
         <ActorInfo id={personId} />
       </Suspense>
       
-      <Suspense fallback={<div className="container mx-auto px-4 py-8"><div className="h-60 bg-neutral-900 animate-pulse rounded-md" /></div>}>
+      <Suspense fallback={<ActorFilmographySkeleton />}>
         <ActorFilmography id={personId} />
       </Suspense>
     </div>

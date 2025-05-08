@@ -120,3 +120,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Skeleton animation */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton-shine {
+  animation: shimmer 2s infinite linear;
+}

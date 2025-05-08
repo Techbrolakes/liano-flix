@@ -3,23 +3,23 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { getPosterUrl } from "@/app/lib/tmdb";
+import { getProfileUrl } from "@/app/lib/tmdb";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Movie } from "../types";
+import { Actor } from "@/app/types";
 
-interface MovieCarouselProps {
+interface CastCarouselProps {
   title: string;
-  movies: Movie[];
+  cast: Actor[];
   viewAllHref?: string;
 }
 
-export const MovieCarousel = ({
+export const CastCarousel = ({
   title,
-  movies,
+  cast,
   viewAllHref,
-}: MovieCarouselProps) => {
+}: CastCarouselProps) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
     containScroll: "trimSnaps",
@@ -34,13 +34,13 @@ export const MovieCarousel = ({
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
 
-  if (!movies || movies.length === 0) {
+  if (!cast || cast.length === 0) {
     return null;
   }
 
   return (
     <div className="py-6">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 px-4 md:px-6 lg:px-8">
         <div className="flex items-center gap-2">
           <h2 className="text-xl font-bold">{title}</h2>
           {viewAllHref && (
@@ -77,21 +77,27 @@ export const MovieCarousel = ({
 
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex gap-4 pl-4 md:pl-6 lg:pl-8">
-          {movies.map((movie) => (
+          {cast.map((person) => (
             <div
-              key={movie.id}
-              className="flex-shrink-0 w-[160px] md:w-[150px] lg:w-[180px] transition-transform duration-300 hover:scale-105"
+              key={person.id}
+              className="flex-shrink-0 w-[140px] md:w-[150px] lg:w-[160px] transition-transform duration-300 hover:scale-105"
             >
-              <Link href={`/movies/${movie.id}`} className="block">
-                <div className="relative aspect-[2/3] rounded-md overflow-hidden mb-2">
+              <Link href={`/actors/${person.id}`} className="block">
+                <div className="aspect-[2/3] relative overflow-hidden rounded-md bg-neutral-800 mb-2">
                   <Image
-                    src={getPosterUrl(movie.poster_path, "medium")}
-                    alt={movie.title}
+                    src={getProfileUrl(person.profile_path, "medium")}
+                    alt={person.name}
                     fill
-                    sizes="(max-width: 768px) 160px, (max-width: 1200px) 180px, 200px"
+                    sizes="(max-width: 768px) 140px, (max-width: 1200px) 150px, 160px"
                     className="object-cover"
                   />
                 </div>
+                <h3 className="text-sm font-medium text-white truncate">
+                  {person.name}
+                </h3>
+                <p className="text-xs text-neutral-400 truncate">
+                  {person.character}
+                </p>
               </Link>
             </div>
           ))}

@@ -2,6 +2,8 @@ import { Suspense } from "react";
 import { HeroSection } from "./components/HeroSection";
 import { MovieCarousel } from "./components/MovieCarousel";
 import { moviesAPI } from "./lib/api";
+import { HeroSkeleton } from "./components/skeletons/HeroSkeleton";
+import { CarouselSkeleton } from "./components/skeletons/CarouselSkeleton";
 
 async function getMovies() {
   try {
@@ -126,9 +128,7 @@ export default function Home() {
     <div className="pb-6">
       {/* Hero Section with Featured Movie */}
       <Suspense
-        fallback={
-          <div className="w-full h-[75vh] bg-muted animate-pulse" />
-        }
+        fallback={<HeroSkeleton />}
       >
         <FeaturedMovie />
       </Suspense>
@@ -162,21 +162,4 @@ export default function Home() {
   );
 }
 
-// Skeleton loaders for the movie carousels
-const CarouselSkeleton = () => (
-  <div className="py-8">
-    <div className="h-8 w-48 bg-muted rounded-md mb-4 px-4 md:px-6 lg:px-8 animate-pulse" />
-    <div className="flex gap-4 overflow-hidden pl-4 md:pl-6 lg:pl-8">
-      {[...Array(6)].map((_, i) => (
-        <div
-          key={i}
-          className="flex-shrink-0 w-[160px] md:w-[180px] lg:w-[200px] animate-pulse"
-        >
-          <div className="aspect-[2/3] bg-muted rounded-md mb-2" />
-          <div className="h-4 bg-muted rounded mb-1" />
-          <div className="h-3 bg-muted rounded w-2/3" />
-        </div>
-      ))}
-    </div>
-  </div>
-);
+
