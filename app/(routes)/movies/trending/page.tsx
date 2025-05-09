@@ -1,18 +1,17 @@
-import { Suspense } from "react";
-import { moviesAPI } from "@/app/lib/api";
+"use client";
+
 import { MovieCatalogue } from "@/app/components/MovieCatalogue";
-import { Metadata } from "next";
+import { useTrendingMovies } from "@/app/hooks/useMovieQueries";
 
-export const metadata: Metadata = {
-  title: "Trending Movies | LianoFlix",
-  description: "Browse trending movies on LianoFlix",
-};
+function TrendingMoviesContent() {
+  const { data, isLoading } = useTrendingMovies("week", 1);
 
-async function TrendingMovies() {
-  const data = await moviesAPI.getTrending("week", 1);
-  
+  if (isLoading || !data) {
+    return <MovieCatalogueSkeleton />;
+  }
+
   return (
-    <MovieCatalogue 
+    <MovieCatalogue
       initialMovies={data.results}
       totalPages={data.total_pages}
       fetchType="trending"
@@ -24,9 +23,7 @@ export default function Page() {
   return (
     <div className="container mx-auto px-4 py-8 pt-20">
       <h1 className="text-3xl font-bold mb-6">Trending Movies</h1>
-      <Suspense fallback={<MovieCatalogueSkeleton />}>
-        <TrendingMovies />
-      </Suspense>
+      <TrendingMoviesContent />
     </div>
   );
 }

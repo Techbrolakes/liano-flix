@@ -1,18 +1,16 @@
-import { Suspense } from "react";
-import { moviesAPI } from "@/app/lib/api";
+"use client";
 import { MovieCatalogue } from "@/app/components/MovieCatalogue";
-import { Metadata } from "next";
+import { usePopularMovies } from "@/app/hooks/useMovieQueries";
 
-export const metadata: Metadata = {
-  title: "Popular Movies | LianoFlix",
-  description: "Browse the most popular movies on LianoFlix",
-};
+function PopularMoviesContent() {
+  const { data, isLoading } = usePopularMovies(1);
 
-async function PopularMovies() {
-  const data = await moviesAPI.getPopular(1);
-  
+  if (isLoading || !data) {
+    return <MovieCatalogueSkeleton />;
+  }
+
   return (
-    <MovieCatalogue 
+    <MovieCatalogue
       initialMovies={data.results}
       totalPages={data.total_pages}
       fetchType="popular"
@@ -24,9 +22,7 @@ export default function Page() {
   return (
     <div className="container mx-auto px-4 py-8 pt-20">
       <h1 className="text-3xl font-bold mb-6">Popular Movies</h1>
-      <Suspense fallback={<MovieCatalogueSkeleton />}>
-        <PopularMovies />
-      </Suspense>
+      <PopularMoviesContent />
     </div>
   );
 }

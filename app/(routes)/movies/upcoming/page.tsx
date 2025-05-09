@@ -1,18 +1,17 @@
-import { Suspense } from "react";
-import { moviesAPI } from "@/app/lib/api";
+"use client";
+
 import { MovieCatalogue } from "@/app/components/MovieCatalogue";
-import { Metadata } from "next";
+import { useUpcomingMovies } from "@/app/hooks/useMovieQueries";
 
-export const metadata: Metadata = {
-  title: "Upcoming Movies | LianoFlix",
-  description: "Browse upcoming movies on LianoFlix",
-};
+function UpcomingMoviesContent() {
+  const { data, isLoading } = useUpcomingMovies(1);
 
-async function UpcomingMovies() {
-  const data = await moviesAPI.getUpcoming(1);
-  
+  if (isLoading || !data) {
+    return <MovieCatalogueSkeleton />;
+  }
+
   return (
-    <MovieCatalogue 
+    <MovieCatalogue
       initialMovies={data.results}
       totalPages={data.total_pages}
       fetchType="upcoming"
@@ -24,9 +23,7 @@ export default function Page() {
   return (
     <div className="container mx-auto px-4 py-8 pt-20">
       <h1 className="text-3xl font-bold mb-6">Upcoming Movies</h1>
-      <Suspense fallback={<MovieCatalogueSkeleton />}>
-        <UpcomingMovies />
-      </Suspense>
+      <UpcomingMoviesContent />
     </div>
   );
 }

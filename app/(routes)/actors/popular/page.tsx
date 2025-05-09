@@ -1,36 +1,37 @@
-import { Suspense } from "react";
-import { peopleAPI } from "@/app/lib/api";
+"use client";
+
+import { useSearchParams } from "next/navigation";
 import { ActorCatalogue } from "@/app/components/ActorCatalogue";
 import { ActorSearch } from "@/app/components/ActorSearch";
-import { Metadata } from "next";
+import { usePopularActors, useSearchActors } from "@/app/hooks/useActorQueries";
 
-export const metadata: Metadata = {
-  title: "Popular Actors | LianoFlix",
-  description: "Browse the most popular actors on LianoFlix",
-};
+function PopularActorsContent() {
+  const searchParams = useSearchParams();
+  const query = searchParams?.get("q") || "";
 
-async function PopularActors({ searchParams }: { searchParams?: { q?: string } }) {
-  const query = searchParams?.q || "";
-  const data = query 
-    ? await peopleAPI.searchPeople(query, 1)
-    : await peopleAPI.getPopular(1);
-  
-  return (
-    <ActorCatalogue 
-      initialActors={data.results}
-      searchQuery={query}
-    />
+  const { data: popularData, isLoading: isLoadingPopular } =
+    usePopularActors(1);
+  const { data: searchData, isLoading: isLoadingSearch } = useSearchActors(
+    query,
+    1
   );
+
+  const isLoading = query ? isLoadingSearch : isLoadingPopular;
+  const data = query ? searchData : popularData;
+
+  if (isLoading || !data) {
+    return <ActorCatalogueSkeleton />;
+  }
+
+  return <ActorCatalogue initialActors={data.results} searchQuery={query} />;
 }
 
-export default function Page({ searchParams }: { searchParams: { q?: string } }) {
+export default function Page() {
   return (
     <div className="container mx-auto px-4 py-8 pt-20">
       <h1 className="text-3xl font-bold mb-6">Popular Actors</h1>
       <ActorSearch />
-      <Suspense fallback={<ActorCatalogueSkeleton />}>
-        <PopularActors searchParams={searchParams} />
-      </Suspense>
+      <PopularActorsContent />
     </div>
   );
 }

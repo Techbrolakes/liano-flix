@@ -1,18 +1,17 @@
-import { Suspense } from "react";
-import { moviesAPI } from "@/app/lib/api";
+"use client";
+
 import { MovieCatalogue } from "@/app/components/MovieCatalogue";
-import { Metadata } from "next";
+import { useTopRatedMovies } from "@/app/hooks/useMovieQueries";
 
-export const metadata: Metadata = {
-  title: "Top Rated Movies | LianoFlix",
-  description: "Browse the highest rated movies on LianoFlix",
-};
+function TopRatedMoviesContent() {
+  const { data, isLoading } = useTopRatedMovies(1);
 
-async function TopRatedMovies() {
-  const data = await moviesAPI.getTopRated(1);
-  
+  if (isLoading || !data) {
+    return <MovieCatalogueSkeleton />;
+  }
+
   return (
-    <MovieCatalogue 
+    <MovieCatalogue
       initialMovies={data.results}
       totalPages={data.total_pages}
       fetchType="top-rated"
@@ -24,9 +23,7 @@ export default function Page() {
   return (
     <div className="container mx-auto px-4 py-8 pt-20">
       <h1 className="text-3xl font-bold mb-6">Top Rated Movies</h1>
-      <Suspense fallback={<MovieCatalogueSkeleton />}>
-        <TopRatedMovies />
-      </Suspense>
+      <TopRatedMoviesContent />
     </div>
   );
 }
