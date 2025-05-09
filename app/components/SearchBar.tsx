@@ -15,21 +15,24 @@ const SearchBar = () => {
   const [localQuery, setLocalQuery] = useState(searchQuery);
   const [showResults, setShowResults] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
-  
+
   const { data, isLoading } = useSearchMovies(localQuery);
   const searchResults = data?.results.slice(0, 5) || [];
 
   // Handle outside click to close results
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
         setShowResults(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -65,8 +68,8 @@ const SearchBar = () => {
             placeholder="Search movies, actors..."
             className="pl-9"
           />
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="absolute left-3 top-1/2 transform -translate-y-1/2"
             aria-label="Search"
           >
@@ -89,9 +92,11 @@ const SearchBar = () => {
       </form>
 
       {showResults && localQuery.length > 2 && (
-        <div className="absolute z-50 mt-2 w-full bg-card rounded-md shadow-lg overflow-hidden border border-border">
+        <div className="absolute z-50 mt-2 w-full bg-card rounded-md shadow-lg overflow-hidden border ">
           {isLoading ? (
-            <div className="p-4 text-center text-sm text-muted-foreground">Loading...</div>
+            <div className="p-4 text-center text-sm text-muted-foreground">
+              Loading...
+            </div>
           ) : searchResults.length > 0 ? (
             <div>
               <div className="max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-muted-foreground scrollbar-track-muted">
@@ -104,22 +109,24 @@ const SearchBar = () => {
                   >
                     <div className="h-16 w-12 flex-shrink-0 relative overflow-hidden rounded-sm">
                       <Image
-                        src={getPosterUrl(movie.poster_path, 'small')}
+                        src={getPosterUrl(movie.poster_path, "small")}
                         alt={movie.title}
                         fill
                         className="object-cover"
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-foreground text-sm font-medium truncate">{movie.title}</h4>
+                      <h4 className="text-foreground text-sm font-medium truncate">
+                        {movie.title}
+                      </h4>
                       <p className="text-muted-foreground text-xs">
-                        {new Date(movie.release_date).getFullYear() || 'N/A'}
+                        {new Date(movie.release_date).getFullYear() || "N/A"}
                       </p>
                     </div>
                   </Link>
                 ))}
               </div>
-              <div className="p-3 border-t border-border">
+              <div className="p-3 border-t ">
                 <button
                   onClick={() => {
                     router.push(`/search?q=${encodeURIComponent(localQuery)}`);

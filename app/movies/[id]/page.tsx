@@ -8,6 +8,7 @@ import { MovieCredits, MovieDetails } from "@/app/types";
 import { getBackdropUrl, getPosterUrl } from "@/app/lib/tmdb";
 import { moviesAPI } from "@/app/lib/api";
 import { MovieInfoSkeleton, MovieCastSkeleton, SimilarMoviesSkeleton } from "@/app/components/skeletons/MovieDetailsSkeleton";
+import { TrailerButton } from "@/app/components/TrailerButton";
 
 async function getMovieDetails(id: number): Promise<MovieDetails> {
   try {
@@ -142,6 +143,11 @@ async function MovieInfo({ id }: { id: number }) {
                 <span>|</span>
                 <div>{movie.original_language.toUpperCase()}</div>
               </div>
+              
+              {/* Trailer Button */}
+              <div className="mb-6">
+                <TrailerButton videos={movie.videos} />
+              </div>
 
               <div className="mb-6">
                 <h2 className="text-xl font-medium text-white mb-2">
@@ -222,8 +228,10 @@ async function SimilarMoviesSection({ id }: { id: number }) {
   );
 }
 
-export default function MoviePage({ params }: { params: { id: string } }) {
-  const movieId = parseInt(params.id, 10);
+export default async function MoviePage({ params }: { params: { id: string } }) {
+  // We need to await params in dynamic routes
+  const id = await params.id;
+  const movieId = parseInt(id, 10);
 
   if (isNaN(movieId)) {
     notFound();

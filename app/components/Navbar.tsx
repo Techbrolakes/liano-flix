@@ -31,7 +31,7 @@ const Navbar = () => {
     <nav
       className={`fixed top-0 w-full z-50 px-4 md:px-6 py-3 flex items-center justify-between transition-colors duration-300 ${
         isScrolled
-          ? "bg-background/90 backdrop-blur-sm border-b border-border"
+          ? "bg-background/90 backdrop-blur-sm border-b "
           : "bg-gradient-to-b from-background/90 to-transparent"
       }`}
     >
@@ -102,9 +102,9 @@ const Navbar = () => {
                 </svg>
               </button>
 
-              <div className="absolute right-0 mt-2 w-48 bg-card rounded-md shadow-lg overflow-hidden z-50 scale-0 origin-top-right group-hover:scale-100 transition-transform duration-200 border border-border">
+              <div className="absolute right-0 mt-2 w-48 bg-card rounded-md shadow-lg overflow-hidden z-50 scale-0 origin-top-right group-hover:scale-100 transition-transform duration-200 border ">
                 <div className="py-1">
-                  <div className="px-4 py-2 text-sm text-muted-foreground border-b border-border">
+                  <div className="px-4 py-2 text-sm text-muted-foreground border-b ">
                     {user?.email}
                   </div>
                   <button
@@ -146,7 +146,9 @@ const NavLink = ({
     <Link
       href={href}
       className={`text-sm font-medium transition ${
-        active ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+        active
+          ? "text-foreground"
+          : "text-muted-foreground hover:text-foreground"
       }`}
     >
       {label}

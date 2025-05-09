@@ -54,7 +54,7 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-20">
-      <div className="w-full max-w-md bg-card p-8 rounded-lg shadow-2xl border border-border">
+      <div className="w-full max-w-md bg-card p-8 rounded-lg shadow-2xl border ">
         <div className="text-center mb-8">
           <h1 className="text-primary text-3xl font-bold mb-2">LianoFlix</h1>
           <h2 className="text-foreground text-xl font-medium">Sign Up</h2>

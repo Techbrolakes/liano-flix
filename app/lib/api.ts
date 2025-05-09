@@ -71,7 +71,7 @@ export const moviesAPI = {
   // Get movie details
   getMovieDetails: (movieId: number) => 
     fetcher<MovieDetails>(
-      buildUrl(`/movie/${movieId}`)
+      buildUrl(`/movie/${movieId}`, { append_to_response: 'videos' })
     ),
     
   // Get movie credits
