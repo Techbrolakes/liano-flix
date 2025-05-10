@@ -1,19 +1,16 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useLogout } from "@/app/hooks/useAuth";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { useAuthStore } from "@/app/store/authStore";
 import { useUIStore } from "@/app/store/uiStore";
-import { Button } from "@/components/ui/button";
+import { useLogout } from "@/app/hooks/useAuth";
+import { supabase } from "@/app/lib/supabase";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Search, Film, User, Home } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Home, Film, User, Search } from "lucide-react";
 import SearchDialog from "./SearchDialog";
 import Logo from "./Logo";
 import ScrollProgressBar from "./ScrollProgressBar";
@@ -51,11 +48,32 @@ const Navbar = () => {
   const { openSearch } = useUIStore();
   const logout = useLogout();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [profileData, setProfileData] = useState<{ avatar_url: string | null } | null>(null);
+
+  // Fetch current user's profile data
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      if (user?.id) {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('avatar_url')
+          .eq('id', user.id)
+          .single();
+        
+        if (data && !error) {
+          setProfileData(data);
+          console.log('Profile data fetched:', data);
+        }
+      }
+    };
+    
+    fetchProfileData();
+  }, [user]);
 
   // Debug auth state
   useEffect(() => {
-    console.log("Navbar auth state:", { isAuthenticated, isLoading, user });
-  }, [isAuthenticated, isLoading, user]);
+    console.log("Navbar auth state:", { isAuthenticated, isLoading, user, profileData });
+  }, [isAuthenticated, isLoading, user, profileData]);
 
   // Handle keyboard shortcut for search
   useEffect(() => {
@@ -169,8 +187,9 @@ const Navbar = () => {
                     <button className="flex items-center gap-2 focus:outline-none p-1 rounded-full hover:bg-primary/10 transition-colors">
                       <Avatar className="h-8 w-8 border-2 border-primary/30 hover:border-primary transition-colors ring-2 ring-background">
                         <AvatarImage
-                          src={user?.avatar_url || undefined}
+                          src={profileData?.avatar_url || user?.avatar_url || undefined}
                           alt={user?.email || "User"}
+                          className="object-cover"
                         />
                         <AvatarFallback className="bg-gradient-to-br from-primary/80 to-primary text-white font-medium">
                           {user?.email
@@ -198,10 +217,11 @@ const Navbar = () => {
                     <div className="flex flex-col">
                       <div className="p-4 border-b border-primary/10 bg-gradient-to-r from-primary/5 to-transparent">
                         <div className="flex items-center gap-3">
-                          <Avatar className="h-12 w-12 border-2 border-primary/30 ring-2 ring-background">
+                          <Avatar className="h-12 w-12 border-2 border-primary/30 ring-2 ring-background hover:border-primary transition-colors">
                             <AvatarImage
-                              src={user?.avatar_url || undefined}
+                              src={profileData?.avatar_url || user?.avatar_url || undefined}
                               alt={user?.email || "User"}
+                              className="object-cover"
                             />
                             <AvatarFallback className="bg-gradient-to-br from-primary/80 to-primary text-white font-medium">
                               {user?.email
@@ -217,8 +237,8 @@ const Navbar = () => {
                               {user?.email}
                             </p>
                             <div className="mt-1 flex items-center">
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
-                                <span className="w-1.5 h-1.5 rounded-full bg-primary mr-1"></span>
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-green-500 to-green-500/10 text-primary">
+                                <span className="w-1.5 h-1.5 rounded-full bg-primary mr-1 animate-pulse"></span>
                                 Active
                               </span>
                             </div>
@@ -299,7 +319,8 @@ const Navbar = () => {
                               <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
-                                d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                                d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"
+                              />
                             </svg>
                           </div>
                           <div className="flex flex-col">
