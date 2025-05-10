@@ -14,7 +14,7 @@ export default function Logo({ size = "md" }: LogoProps) {
   };
 
   return (
-    <Link href="/" className="flex items-center gap-1 font-bold">
+    <Link href="/" className="flex items-center gap-1 font-bold cursor-pointer">
       <span
         className={`${sizeClasses[size]} bg-gradient-to-r from-red-500 to-red-600 bg-clip-text text-transparent`}
       >

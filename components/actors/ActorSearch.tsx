@@ -42,23 +42,25 @@ export function ActorSearch() {
 
   return (
     <Suspense fallback={<MovieInfoSkeleton />}>
-      <div className="w-full max-w-lg mx-auto mb-8">
+      <div className="w-full max-w-xl mx-auto">
         <form onSubmit={handleSearch} className="relative">
-          <Input
-            type="text"
-            placeholder="Search for actors..."
-            value={searchQuery}
-            onChange={handleChange}
-            className="pr-10"
-          />
-          <Button
-            type="submit"
-            size="icon"
-            variant="ghost"
-            className="absolute right-0 top-0 h-full"
-          >
-            <Search className="h-4 w-4" />
-          </Button>
+          <div className="relative group">
+            <Input
+              type="text"
+              placeholder="Search for actors..."
+              value={searchQuery}
+              onChange={handleChange}
+              className="pr-14 bg-background/80 backdrop-blur-sm border-primary/20 focus:border-primary/40 focus:ring-primary/20 rounded-lg pl-4 h-11 transition-all duration-300"
+            />
+            <Button
+              type="submit"
+              size="icon"
+              variant="ghost"
+              className="absolute right-1 top-1/2 -translate-y-1/2 h-9 w-9 rounded-md bg-primary/5 hover:bg-primary/10 text-primary transition-all duration-300"
+            >
+              <Search className="h-4 w-4" />
+            </Button>
+          </div>
         </form>
       </div>
     </Suspense>

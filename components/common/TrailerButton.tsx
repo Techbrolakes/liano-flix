@@ -45,7 +45,7 @@ export const TrailerButton = ({ videos }: TrailerButtonProps) => {
     <>
       <button
         onClick={handlePlayTrailer}
-        className="flex items-center cursor-pointer gap-2 bg-primary hover:bg-primary/80 text-primary-foreground rounded-md px-4 py-2 font-medium transition"
+        className="flex items-center cursor-pointer gap-2 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 hover:bg-primary/90 text-white rounded-md px-4 py-2 font-medium transition"
       >
         <Play size={16} />
         Watch Trailer

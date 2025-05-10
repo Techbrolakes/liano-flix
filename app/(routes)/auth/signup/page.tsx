@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useSignup } from "@/app/hooks/useAuth";
+import { useSignup, useOAuthLogin } from "@/app/hooks/useAuth";
 import { useAuthStore } from "@/app/store/authStore";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,7 +15,7 @@ import {
   EmailIcon,
   LockIcon,
   GoogleIcon,
-  AppleIcon,
+  GitHubIcon,
   SpinnerIcon,
 } from "@/components/icons";
 import {
@@ -33,6 +33,7 @@ const BACKDROP_IMAGE = "/images/placeholder.svg";
 export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
   const { mutate: signup, isPending } = useSignup();
+  const { mutate: oauthLogin, isPending: isOAuthPending } = useOAuthLogin();
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
 
@@ -224,14 +225,32 @@ export default function SignupPage() {
                   <Button
                     variant="outline"
                     className="bg-transparent border border-neutral-800 hover:bg-neutral-800/50 text-white"
+                    onClick={() => {
+                      setError(null);
+                      oauthLogin({ provider: 'google' }, {
+                        onError: (err) => {
+                          setError(err.message || "Failed to sign up with Google. Please try again.");
+                        }
+                      });
+                    }}
+                    disabled={isOAuthPending}
                   >
                     <GoogleIcon className="mr-2 h-4 w-4" /> Google
                   </Button>
                   <Button
                     variant="outline"
                     className="bg-transparent border border-neutral-800 hover:bg-neutral-800/50 text-white"
+                    onClick={() => {
+                      setError(null);
+                      oauthLogin({ provider: 'github' }, {
+                        onError: (err) => {
+                          setError(err.message || "Failed to sign up with GitHub. Please try again.");
+                        }
+                      });
+                    }}
+                    disabled={isOAuthPending}
                   >
-                    <AppleIcon className="mr-2 h-4 w-4" /> Apple
+                    <GitHubIcon className="mr-2 h-4 w-4" /> GitHub
                   </Button>
                 </div>
 

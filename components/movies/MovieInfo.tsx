@@ -104,7 +104,7 @@ export function MovieInfo({ id }: { id: number }) {
             </div>
 
             {/* Trailer Button and Watchlist Button */}
-            <div className="flex flex-wrap gap-3 mb-6">
+            <div className="flex items-center flex-wrap gap-3 mb-6">
               <TrailerButton videos={movie.videos} />
               <WatchlistButton movieId={movie.id} />
             </div>

@@ -139,6 +139,32 @@ export const useLogin = () => {
   });
 };
 
+export const useOAuthLogin = () => {
+  return useMutation({
+    mutationFn: async ({ provider }: { provider: 'google' | 'github' }) => {
+      console.log(`Attempting OAuth login with ${provider}`);
+      
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: provider === 'google' ? {
+            access_type: 'offline',
+            prompt: 'consent',
+          } : undefined,
+        },
+      });
+
+      if (error) {
+        console.error(`${provider} OAuth error:`, error.message);
+        throw new Error(error.message);
+      }
+
+      return data;
+    },
+  });
+};
+
 export const useSignup = () => {
   const router = useRouter();
 
@@ -198,6 +224,39 @@ export const useLogout = () => {
 export const useIsAuthenticated = () => {
   const { isAuthenticated, isLoading } = useAuthStore();
   return { isAuthenticated, isLoading };
+};
+
+// Helper function to get user profile after OAuth login
+export const useGetUserProfile = () => {
+  const { setUser, setIsAuthenticated } = useAuthStore();
+  
+  return useQuery({
+    queryKey: ['user-profile'],
+    queryFn: async () => {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      
+      if (error) {
+        throw new Error(error.message);
+      }
+      
+      if (user) {
+        const userData: User = {
+          id: user.id,
+          email: user.email || "",
+          created_at: user.created_at,
+          updated_at: user.updated_at || "",
+          avatar_url: user.user_metadata?.avatar_url,
+        };
+        
+        setUser(userData);
+        setIsAuthenticated(true);
+        return userData;
+      }
+      
+      return null;
+    },
+    enabled: false, // Don't run automatically
+  });
 };
 
 export const useGetProfile = () => {

@@ -46,9 +46,14 @@ function PopularActorsContent() {
 export default function Page() {
   return (
     <Suspense fallback={<ActorCatalogueSkeleton />}>
-      <div className="container mx-auto px-4 py-8 pt-20">
-        <h1 className="text-3xl font-bold mb-6">Popular Actors</h1>
-        <ActorSearch />
+      <div className="container mx-auto px-4 py-12">
+        {/* Enhanced header section with gradient background */}
+        <div className="mb-8 rounded-xl bg-gradient-from-card/50 to-card p-6 border border-primary/10 shadow-sm">
+          <h1 className="text-3xl font-bold mb-3">Popular Actors</h1>
+          <p className="text-muted-foreground mb-6">Discover talented actors and explore their filmography</p>
+          <ActorSearch />
+        </div>
+        
         <PopularActorsContent />
       </div>
     </Suspense>

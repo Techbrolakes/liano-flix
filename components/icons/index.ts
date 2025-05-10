@@ -1,5 +1,5 @@
 export { EmailIcon } from './EmailIcon';
 export { LockIcon } from './LockIcon';
 export { GoogleIcon } from './GoogleIcon';
-export { AppleIcon } from './AppleIcon';
+export { GitHubIcon } from './GitHubIcon';
 export { SpinnerIcon } from './SpinnerIcon';

@@ -11,7 +11,7 @@ import { Loader2 } from "lucide-react";
 export default function GenrePage() {
   const params = useParams();
   const genreId = Number(params.id);
-  
+
   const [movies, setMovies] = useState<Movie[]>([]);
   const [genreName, setGenreName] = useState("");
   const [loading, setLoading] = useState(true);
@@ -23,14 +23,14 @@ export default function GenrePage() {
     const fetchGenreMovies = async () => {
       try {
         setLoading(true);
-        
+
         // Get genre name
         const genresResponse = await moviesAPI.getGenres();
-        const genre = genresResponse.genres.find(g => g.id === genreId);
-        
+        const genre = genresResponse.genres.find((g) => g.id === genreId);
+
         if (genre) {
           setGenreName(genre.name);
-          
+
           // Get movies for this genre
           const moviesResponse = await moviesAPI.getMoviesByGenre(genreId, 1);
           setMovies(moviesResponse.results);
@@ -50,13 +50,13 @@ export default function GenrePage() {
 
   const loadMoreMovies = async () => {
     if (loadingMore || page >= totalPages) return;
-    
+
     try {
       setLoadingMore(true);
       const nextPage = page + 1;
       const response = await moviesAPI.getMoviesByGenre(genreId, nextPage);
-      
-      setMovies(prev => [...prev, ...response.results]);
+
+      setMovies((prev) => [...prev, ...response.results]);
       setPage(nextPage);
     } catch (error) {
       console.error("Error loading more movies:", error);
@@ -79,15 +79,15 @@ export default function GenrePage() {
         title={genreName}
         subtitle={`Explore all ${genreName} movies`}
       />
-      
+
       <MovieGrid movies={movies} />
-      
+
       {page < totalPages && (
         <div className="flex justify-center mt-8">
           <button
             onClick={loadMoreMovies}
             disabled={loadingMore}
-            className="px-6 py-3 bg-primary hover:bg-primary/90 text-white rounded-md flex items-center gap-2 disabled:opacity-50"
+            className="px-6 py-3 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 hover:bg-primary/90 text-white rounded-md flex items-center gap-2 disabled:opacity-50"
           >
             {loadingMore ? (
               <>
