@@ -26,7 +26,7 @@ export default function ReviewsPage() {
   }
 
   return (
-    <div className="container max-w-6xl mx-auto py-12 px-4">
+    <div className="container mx-auto py-12 px-4">
       <div className="flex items-center gap-4 mb-8">
         <Button 
           variant="ghost" 

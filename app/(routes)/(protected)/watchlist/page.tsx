@@ -109,7 +109,7 @@ export default function WatchlistPage() {
   }
 
   return (
-    <div className="container max-w-6xl mx-auto py-12 px-4">
+    <div className="container mx-auto py-12 px-4">
       <div className="flex flex-col space-y-6">
         {/* Header with count */}
         <div className="flex items-center justify-between">
