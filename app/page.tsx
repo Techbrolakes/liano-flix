@@ -3,7 +3,7 @@ import { moviesAPI } from "./lib/api";
 import { HeroSkeleton } from "../components/skeletons/HeroSkeleton";
 import { CarouselSkeleton } from "../components/skeletons/CarouselSkeleton";
 import { MovieCarousel } from "@/components/movies";
-import { HeroSection } from "@/components/common/HeroSection";
+import { HeroCarousel } from "@/components/common/HeroCarousel";
 
 async function getMovies() {
   try {
@@ -20,23 +20,23 @@ async function getMovies() {
     // Select a diverse set of popular genres (12 genres instead of 5)
     // These are some of the most popular genres on TMDB
     const popularGenreIds = [
-      28,    // Action
-      12,    // Adventure
-      16,    // Animation
-      35,    // Comedy
-      80,    // Crime
-      18,    // Drama
-      14,    // Fantasy
-      27,    // Horror
+      28, // Action
+      12, // Adventure
+      16, // Animation
+      35, // Comedy
+      80, // Crime
+      18, // Drama
+      14, // Fantasy
+      27, // Horror
       10749, // Romance
-      878,   // Science Fiction
-      53,    // Thriller
-      10752  // War
+      878, // Science Fiction
+      53, // Thriller
+      10752, // War
     ];
-    
+
     // Filter genres to include only the popular ones and ensure they exist in the API response
     const selectedGenres = genresData.genres
-      .filter(genre => popularGenreIds.includes(genre.id))
+      .filter((genre) => popularGenreIds.includes(genre.id))
       // Sort them in the same order as popularGenreIds
       .sort((a, b) => {
         return popularGenreIds.indexOf(a.id) - popularGenreIds.indexOf(b.id);
@@ -139,13 +139,13 @@ async function GenreCarousels() {
 }
 
 async function FeaturedMovie() {
-  const { featuredMovie } = await getMovies();
+  const { trending } = await getMovies();
 
-  if (!featuredMovie) {
+  if (!trending || trending.length === 0) {
     return null;
   }
 
-  return <HeroSection movie={featuredMovie} />;
+  return <HeroCarousel movies={trending} />;
 }
 
 export default function Home() {
@@ -157,9 +157,9 @@ export default function Home() {
       </Suspense>
 
       {/* Movie Carousels - Adaptive positioning with smaller negative margin on mobile */}
-      <div className="relative z-10 -mt-8 sm:-mt-12 md:-mt-16 lg:-mt-20">
-        <div className="container mx-auto px-3 sm:px-4 md:px-6">
-          <div className="max-w-screen-2xl mx-auto">
+      <div className="relative z-10">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="max-w-screen-3xl mx-auto">
             <Suspense fallback={<CarouselSkeleton />}>
               <TrendingMoviesCarousel />
             </Suspense>
