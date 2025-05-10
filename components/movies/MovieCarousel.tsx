@@ -42,13 +42,16 @@ export const MovieCarousel = ({
     <div className="py-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <h2 className="text-xl font-bold">{title}</h2>
+          <h2 className="text-xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">{title}</h2>
           {viewAllHref && (
             <Link
               href={viewAllHref}
-              className="text-sm font-medium text-primary hover:underline ml-2"
+              className="text-sm font-medium bg-primary/10 text-primary hover:bg-primary/20 px-3 py-1 rounded-full transition-all ml-2 flex items-center"
             >
               View All
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+              </svg>
             </Link>
           )}
         </div>

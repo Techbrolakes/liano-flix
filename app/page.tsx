@@ -17,8 +17,33 @@ async function getMovies() {
         moviesAPI.getGenres(),
       ]);
 
+    // Select a diverse set of popular genres (12 genres instead of 5)
+    // These are some of the most popular genres on TMDB
+    const popularGenreIds = [
+      28,    // Action
+      12,    // Adventure
+      16,    // Animation
+      35,    // Comedy
+      80,    // Crime
+      18,    // Drama
+      14,    // Fantasy
+      27,    // Horror
+      10749, // Romance
+      878,   // Science Fiction
+      53,    // Thriller
+      10752  // War
+    ];
+    
+    // Filter genres to include only the popular ones and ensure they exist in the API response
+    const selectedGenres = genresData.genres
+      .filter(genre => popularGenreIds.includes(genre.id))
+      // Sort them in the same order as popularGenreIds
+      .sort((a, b) => {
+        return popularGenreIds.indexOf(a.id) - popularGenreIds.indexOf(b.id);
+      });
+
     // Get movies for different genres
-    const genrePromises = genresData.genres.slice(0, 5).map(async (genre) => {
+    const genrePromises = selectedGenres.map(async (genre) => {
       const data = await moviesAPI.getMoviesByGenre(genre.id);
       return {
         id: genre.id,
