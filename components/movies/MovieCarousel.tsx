@@ -7,7 +7,7 @@ import { getPosterUrl } from "@/app/lib/tmdb";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Movie } from "../types";
+import { Movie } from "@/app/types";
 
 interface MovieCarouselProps {
   title: string;

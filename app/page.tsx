@@ -1,9 +1,9 @@
 import { Suspense } from "react";
-import { HeroSection } from "./components/HeroSection";
-import { MovieCarousel } from "./components/MovieCarousel";
+import { HeroSection } from "../components/HeroSection";
 import { moviesAPI } from "./lib/api";
-import { HeroSkeleton } from "./components/skeletons/HeroSkeleton";
-import { CarouselSkeleton } from "./components/skeletons/CarouselSkeleton";
+import { HeroSkeleton } from "../components/skeletons/HeroSkeleton";
+import { CarouselSkeleton } from "../components/skeletons/CarouselSkeleton";
+import { MovieCarousel } from "@/components/movies";
 
 async function getMovies() {
   try {
@@ -16,17 +16,17 @@ async function getMovies() {
         moviesAPI.getUpcoming(),
         moviesAPI.getGenres(),
       ]);
-    
+
     // Get movies for different genres
     const genrePromises = genresData.genres.slice(0, 5).map(async (genre) => {
       const data = await moviesAPI.getMoviesByGenre(genre.id);
       return {
         id: genre.id,
         name: genre.name,
-        movies: data.results
+        movies: data.results,
       };
     });
-    
+
     const genreMovies = await Promise.all(genrePromises);
 
     return {
@@ -98,7 +98,7 @@ async function UpcomingMoviesCarousel() {
 
 async function GenreCarousels() {
   const { genreMovies } = await getMovies();
-  
+
   return (
     <>
       {genreMovies.map((genre) => (
@@ -127,9 +127,7 @@ export default function Home() {
   return (
     <div className="pb-6">
       {/* Hero Section with Featured Movie */}
-      <Suspense
-        fallback={<HeroSkeleton />}
-      >
+      <Suspense fallback={<HeroSkeleton />}>
         <FeaturedMovie />
       </Suspense>
 
@@ -152,7 +150,7 @@ export default function Home() {
             <Suspense fallback={<CarouselSkeleton />}>
               <UpcomingMoviesCarousel />
             </Suspense>
-            
+
             {/* Genre-specific Carousels */}
             <Suspense fallback={<CarouselSkeleton />}>
               <GenreCarousels />
@@ -163,5 +161,3 @@ export default function Home() {
     </div>
   );
 }
-
-

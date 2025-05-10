@@ -1,7 +1,7 @@
 "use client";
 
-import { MovieCatalogue } from "@/app/components/MovieCatalogue";
 import { useTrendingMovies } from "@/app/hooks/useMovieQueries";
+import { MovieCatalogue } from "@/components/movies/MovieCatalogue";
 
 function TrendingMoviesContent() {
   const { data, isLoading } = useTrendingMovies("week", 1);

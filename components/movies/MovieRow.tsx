@@ -1,6 +1,6 @@
 "use client";
 
-import { Movie } from "../types";
+import { Movie } from "@/app/types";
 import { MovieCarousel } from "./MovieCarousel";
 
 interface MovieRowProps {

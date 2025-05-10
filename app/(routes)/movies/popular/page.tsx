@@ -1,6 +1,7 @@
 "use client";
-import { MovieCatalogue } from "@/app/components/MovieCatalogue";
+
 import { usePopularMovies } from "@/app/hooks/useMovieQueries";
+import { MovieCatalogue } from "@/components/movies";
 
 function PopularMoviesContent() {
   const { data, isLoading } = usePopularMovies(1);

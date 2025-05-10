@@ -1,6 +1,6 @@
 "use client";
 
-import { MovieCatalogue } from "@/app/components/MovieCatalogue";
+import { MovieCatalogue } from "@/components/movies/MovieCatalogue";
 import { useTopRatedMovies } from "@/app/hooks/useMovieQueries";
 
 function TopRatedMoviesContent() {

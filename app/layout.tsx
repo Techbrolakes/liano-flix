@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+"use client";
+
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/app/components/Navbar";
+import Navbar from "@/components/Navbar";
 import { Providers } from "@/app/providers";
-import TopLoader from "@/app/components/TopLoader";
-import SmoothScrollProvider from "@/app/components/SmoothScrollProvider";
+import TopLoader from "@/components/TopLoader";
+import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,20 +16,6 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
-export const metadata: Metadata = {
-  title: "LianoFlix | Stream Movies & TV Shows",
-  description:
-    "Watch your favorite movies and TV shows on LianoFlix - a Netflix-inspired streaming service",
-  keywords: [
-    "movies",
-    "streaming",
-    "netflix",
-    "lianoflix",
-    "tv shows",
-    "watch online",
-  ],
-};
 
 export default function RootLayout({
   children,
