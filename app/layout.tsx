@@ -33,7 +33,7 @@ export default function RootLayout({
           <SmoothScrollProvider>
             <div className="flex flex-col min-h-screen">
               <Navbar />
-              <main className="flex-1 pt-16 overflow-hidden">{children}</main>
+              <main className="flex-1 pt-4 overflow-hidden">{children}</main>
             </div>
           </SmoothScrollProvider>
         </Providers>

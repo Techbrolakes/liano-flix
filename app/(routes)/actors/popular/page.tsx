@@ -3,8 +3,6 @@
 import { Suspense } from "react";
 import { ActorCatalogue } from "@/components/actors/ActorCatalogue";
 import { ActorSearch } from "@/components/actors/ActorSearch";
-
-// Import hooks at the top level
 import { useSearchParams } from "next/navigation";
 import { usePopularActors, useSearchActors } from "@/app/hooks/useActorQueries";
 
@@ -22,7 +20,6 @@ function ActorCatalogueSkeleton() {
   );
 }
 
-// Client component that uses the hooks
 function PopularActorsContent() {
   const searchParams = useSearchParams();
   const query = searchParams?.get("q") || "";
