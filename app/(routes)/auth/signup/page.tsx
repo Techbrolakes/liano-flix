@@ -198,7 +198,7 @@ export default function SignupPage() {
                 <Button
                   type="submit"
                   disabled={isPending}
-                  className="w-full mt-2 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 text-white font-medium py-2.5 rounded-lg transition-all duration-300 shadow-lg hover:shadow-red-500/20"
+                  className="cursor-pointer w-full mt-2 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 text-white font-medium py-2.5 rounded-lg transition-all duration-300 shadow-lg hover:shadow-red-500/20"
                 >
                   {isPending ? (
                     <span className="flex items-center justify-center">
@@ -224,14 +224,20 @@ export default function SignupPage() {
                 <div className="grid grid-cols-2 gap-3">
                   <Button
                     variant="outline"
-                    className="bg-transparent border border-neutral-800 hover:bg-neutral-800/50 text-white"
+                    className="bg-transparent border border-neutral-800 hover:bg-neutral-800/50 text-white cursor-pointer"
                     onClick={() => {
                       setError(null);
-                      oauthLogin({ provider: 'google' }, {
-                        onError: (err) => {
-                          setError(err.message || "Failed to sign up with Google. Please try again.");
+                      oauthLogin(
+                        { provider: "google" },
+                        {
+                          onError: (err) => {
+                            setError(
+                              err.message ||
+                                "Failed to sign up with Google. Please try again."
+                            );
+                          },
                         }
-                      });
+                      );
                     }}
                     disabled={isOAuthPending}
                   >
@@ -239,14 +245,20 @@ export default function SignupPage() {
                   </Button>
                   <Button
                     variant="outline"
-                    className="bg-transparent border border-neutral-800 hover:bg-neutral-800/50 text-white"
+                    className="bg-transparent border border-neutral-800 hover:bg-neutral-800/50 text-white cursor-pointer"
                     onClick={() => {
                       setError(null);
-                      oauthLogin({ provider: 'github' }, {
-                        onError: (err) => {
-                          setError(err.message || "Failed to sign up with GitHub. Please try again.");
+                      oauthLogin(
+                        { provider: "github" },
+                        {
+                          onError: (err) => {
+                            setError(
+                              err.message ||
+                                "Failed to sign up with GitHub. Please try again."
+                            );
+                          },
                         }
-                      });
+                      );
                     }}
                     disabled={isOAuthPending}
                   >
@@ -259,7 +271,7 @@ export default function SignupPage() {
                     Already have an account?{" "}
                     <Link
                       href="/auth/login"
-                      className="text-red-500 hover:text-red-400 font-medium transition-colors"
+                      className="text-red-500 hover:text-red-400 font-medium transition-colors cursor-pointer"
                     >
                       Sign in
                     </Link>
