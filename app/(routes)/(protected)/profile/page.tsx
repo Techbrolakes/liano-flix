@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -33,6 +34,7 @@ const profileSchema = z.object({
     .string()
     .min(2, "Full name must be at least 2 characters")
     .optional(),
+  avatar_url: z.string().optional(),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -125,56 +127,87 @@ export default function ProfilePage() {
     }
   };
 
-  const handleAvatarChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    if (!user || !event.target.files || event.target.files.length === 0) {
-      return;
-    }
-
-    const file = event.target.files[0];
-    const fileExt = file.name.split(".").pop();
-    const filePath = `${user.id}-${Math.random()}.${fileExt}`;
-
-    setError(null);
-    setUploadingAvatar(true);
-
-    try {
-      // Upload the file to Supabase storage
-      const { error: uploadError } = await supabase.storage
-        .from("avatars")
-        .upload(filePath, file);
-
-      if (uploadError) {
-        throw uploadError;
+  // Use react-dropzone for file uploads
+  const onDrop = useCallback(
+    async (acceptedFiles: File[]) => {
+      if (!user || acceptedFiles.length === 0) {
+        return;
       }
 
-      // Get the public URL
-      const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
+      const file = acceptedFiles[0];
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${user.id}-${Math.random()
+        .toString()
+        .substring(2, 8)}.${fileExt}`;
 
-      const avatarUrl = data.publicUrl;
+      setError(null);
+      setUploadingAvatar(true);
 
-      // Update the user's profile with the new avatar URL
-      const { error: updateError } = await supabase.from("profiles").upsert({
-        id: user.id,
-        avatar_url: avatarUrl,
-        updated_at: new Date().toISOString(),
-      });
+      try {
+        // Convert file to ArrayBuffer for maximum compatibility
+        const fileArrayBuffer = await file.arrayBuffer();
 
-      if (updateError) {
-        throw updateError;
+        // Upload file to Supabase Storage using ArrayBuffer
+        const { error: uploadError } = await supabase.storage
+          .from("avatars")
+          .upload(fileName, fileArrayBuffer, {
+            upsert: true,
+            contentType: file.type, // Explicitly set the Content-Type based on the file
+            cacheControl: "3600",
+          });
+
+        if (uploadError) {
+          throw uploadError;
+        }
+
+        // Get the public URL
+        const { data: urlData } = supabase.storage
+          .from("avatars")
+          .getPublicUrl(fileName);
+
+        if (!urlData || !urlData.publicUrl) {
+          throw new Error("Failed to get public URL for uploaded file");
+        }
+
+        const avatarUrl = urlData.publicUrl;
+
+        // Update the user's profile with the new avatar URL
+        const { error: updateError } = await supabase
+          .from("profiles")
+          .update({
+            avatar_url: avatarUrl,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", user.id);
+
+        if (updateError) {
+          throw updateError;
+        }
+
+        setAvatarUrl(avatarUrl);
+        setSuccess("Avatar updated successfully");
+      } catch (error: unknown) {
+        setError(
+          error instanceof Error ? error.message : "Error uploading avatar"
+        );
+      } finally {
+        setUploadingAvatar(false);
       }
+    },
+    [user]
+  );
 
-      setAvatarUrl(avatarUrl);
-      setSuccess("Avatar updated successfully");
-    } catch (error: unknown) {
-      setError(
-        error instanceof Error ? error.message : "Error uploading avatar"
-      );
-    } finally {
-      setUploadingAvatar(false);
-    }
-  };
+  // Configure dropzone
+  const { getRootProps, getInputProps, open } = useDropzone({
+    onDrop,
+    accept: {
+      "image/*": [".jpeg", ".jpg", ".png", ".gif", ".webp"],
+    },
+    maxFiles: 1,
+    multiple: false,
+    noClick: true, // Disable click to open file dialog, we'll use our own button
+    noKeyboard: true,
+  });
 
   if (isLoading) {
     return (
@@ -225,8 +258,7 @@ export default function ProfilePage() {
                 ) : (
                   <Avatar className="h-32 w-32 border-4 border-primary/20">
                     <AvatarImage
-                      src={avatarUrl || undefined}
-                      alt={user?.email || "User"}
+                      src={avatarUrl || profileData?.avatar_url || undefined}
                     />
                     <AvatarFallback className="text-2xl bg-neutral-800 text-primary">
                       {user?.email ? user.email.charAt(0).toUpperCase() : "U"}
@@ -234,9 +266,11 @@ export default function ProfilePage() {
                   </Avatar>
                 )}
 
-                <label
-                  htmlFor="avatar-upload"
+                {/* Upload button */}
+                <div
+                  onClick={open}
                   className="absolute bottom-0 right-0 bg-primary text-primary-foreground rounded-full p-2 cursor-pointer shadow-lg hover:bg-primary/90 transition-colors"
+                  title="Upload new avatar"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -257,14 +291,12 @@ export default function ProfilePage() {
                       d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"
                     />
                   </svg>
-                </label>
-                <input
-                  id="avatar-upload"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleAvatarChange}
-                  className="hidden"
-                />
+                </div>
+
+                {/* Hidden dropzone container */}
+                <div {...getRootProps()} className="hidden">
+                  <input {...getInputProps()} />
+                </div>
               </div>
 
               <h2 className="text-xl font-bold mb-1">
