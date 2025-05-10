@@ -1,0 +1,17 @@
+{
+  "name": "Liano Flix",
+  "short_name": "Liano Flix",
+  "description": "Discover your next favorite movie with Liano Flix",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#7C3AED",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,12 +1,26 @@
-"use client";
-
+import { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Providers } from "@/app/providers";
-import TopLoader from "@/components/common/TopLoader";
-import SmoothScrollProvider from "@/components/common/SmoothScrollProvider";
 import { satoshi } from "./fonts";
-import Navbar from "@/components/common/Navbar";
+import ClientLayout from "./client-layout";
+
+export const metadata: Metadata = {
+  title: {
+    template: "%s | Liano Flix",
+    default: "Liano Flix - Discover Your Next Favorite Movie",
+  },
+  description:
+    "Explore movies, create watchlists, and share reviews on your favorite films.",
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    apple: "/icons/apple-touch-icon.png",
+  },
+  manifest: "/manifest.json",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#7C3AED",
+};
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,19 +38,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${satoshi.variable} antialiased bg-background min-h-screen font-sans`}
       >
-        <TopLoader />
-        <Providers>
-          <SmoothScrollProvider>
-            <div className="flex flex-col min-h-screen">
-              <Navbar />
-              <main className="flex-1 pt-4 overflow-hidden">{children}</main>
-            </div>
-          </SmoothScrollProvider>
-        </Providers>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
