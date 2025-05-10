@@ -20,6 +20,7 @@ export const useAuth = () => {
     const checkSession = async () => {
       try {
         setIsLoading(true);
+        console.log('Checking session...');
         const {
           data: { session },
           error,
@@ -29,17 +30,22 @@ export const useAuth = () => {
           throw error;
         }
 
+        console.log('Session check result:', !!session);
+
         if (session?.user) {
+          console.log('User authenticated:', session.user.email);
           const userData: User = {
             id: session.user.id,
             email: session.user.email || "",
             created_at: session.user.created_at,
             updated_at: session.user.updated_at || "",
+            avatar_url: session.user.user_metadata?.avatar_url,
           };
 
           setUser(userData);
           setIsAuthenticated(true);
         } else {
+          console.log('No active session found');
           setUser(null);
           setIsAuthenticated(false);
         }
@@ -57,13 +63,16 @@ export const useAuth = () => {
     // Subscribe to auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('Auth state changed:', event, !!session);
+      
       if (session?.user) {
         const userData: User = {
           id: session.user.id,
           email: session.user.email || "",
           created_at: session.user.created_at,
           updated_at: session.user.updated_at || "",
+          avatar_url: session.user.user_metadata?.avatar_url,
         };
 
         setUser(userData);
@@ -85,6 +94,7 @@ export const useAuth = () => {
 
 export const useLogin = () => {
   const router = useRouter();
+  const { setUser, setIsAuthenticated } = useAuthStore();
 
   return useMutation({
     mutationFn: async ({
@@ -94,13 +104,31 @@ export const useLogin = () => {
       email: string;
       password: string;
     }) => {
+      console.log('Attempting login for:', email);
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) {
+        console.error('Login error:', error.message);
         throw new Error(error.message);
+      }
+
+      console.log('Login successful:', !!data.session);
+      
+      // Manually update auth state to ensure it's set immediately
+      if (data.user) {
+        const userData: User = {
+          id: data.user.id,
+          email: data.user.email || "",
+          created_at: data.user.created_at,
+          updated_at: data.user.updated_at || "",
+          avatar_url: data.user.user_metadata?.avatar_url,
+        };
+        
+        setUser(userData);
+        setIsAuthenticated(true);
       }
 
       return data;
@@ -125,6 +153,9 @@ export const useSignup = () => {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
       });
 
       if (error) {
@@ -133,8 +164,12 @@ export const useSignup = () => {
 
       return data;
     },
-    onSuccess: () => {
-      router.push("/");
+    onSuccess: (data) => {
+      if (data.user && !data.user.email_confirmed_at) {
+        router.push("/auth/verification-sent");
+      } else {
+        router.push("/");
+      }
     },
   });
 };
@@ -155,7 +190,7 @@ export const useLogout = () => {
     },
     onSuccess: () => {
       logoutStore();
-      router.push("/login");
+      router.push("/auth/login");
     },
   });
 };
@@ -188,5 +223,42 @@ export const useGetProfile = () => {
       return data;
     },
     enabled: !!user,
+  });
+};
+
+export const useResetPassword = () => {
+  return useMutation({
+    mutationFn: async ({ email }: { email: string }) => {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/update-password`,
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      return true;
+    },
+  });
+};
+
+export const useUpdatePassword = () => {
+  const router = useRouter();
+  
+  return useMutation({
+    mutationFn: async ({ password }: { password: string }) => {
+      const { error } = await supabase.auth.updateUser({
+        password,
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      return true;
+    },
+    onSuccess: () => {
+      router.push("/auth/login?message=Password updated successfully");
+    },
   });
 };

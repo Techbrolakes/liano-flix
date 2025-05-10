@@ -6,13 +6,20 @@ import { useState, useEffect } from "react";
 import { useLogout } from "@/app/hooks/useAuth";
 import { useAuthStore } from "@/app/store/authStore";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import SearchBar from "./SearchBar";
 
 const Navbar = () => {
   const pathname = usePathname();
-  const { user, isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated, isLoading } = useAuthStore();
   const logout = useLogout();
   const [isScrolled, setIsScrolled] = useState(false);
+  
+  // Debug auth state
+  useEffect(() => {
+    console.log('Navbar auth state:', { isAuthenticated, isLoading, user });
+  }, [isAuthenticated, isLoading, user]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,60 +69,82 @@ const Navbar = () => {
 
         {isAuthenticated ? (
           <div className="flex items-center gap-4">
-            <div className="relative group">
-              <button className="flex items-center gap-2 focus:outline-none">
-                <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center overflow-hidden">
-                  {user?.email ? (
-                    <span className="uppercase text-sm font-bold">
-                      {user.email.charAt(0)}
-                    </span>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-5 h-5"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-                      />
-                    </svg>
-                  )}
-                </div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-4 h-4"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
-              </button>
-
-              <div className="absolute right-0 mt-2 w-48 bg-card rounded-md shadow-lg overflow-hidden z-50 scale-0 origin-top-right group-hover:scale-100 transition-transform duration-200 border ">
-                <div className="py-1">
-                  <div className="px-4 py-2 text-sm text-muted-foreground border-b ">
-                    {user?.email}
-                  </div>
-                  <button
-                    onClick={() => logout.mutate()}
-                    className="block w-full text-left px-4 py-2 text-sm text-foreground hover:bg-accent transition"
+            <Popover>
+              <PopoverTrigger asChild>
+                <button className="flex items-center gap-2 focus:outline-none">
+                  <Avatar className="h-8 w-8 border-2 border-primary/20 hover:border-primary/50 transition-colors">
+                    <AvatarImage src={user?.avatar_url || undefined} alt={user?.email || "User"} />
+                    <AvatarFallback className="bg-neutral-800 text-primary">
+                      {user?.email ? user.email.charAt(0).toUpperCase() : "U"}
+                    </AvatarFallback>
+                  </Avatar>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-4 h-4 text-muted-foreground"
                   >
-                    Sign Out
-                  </button>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-64 p-0 bg-card/95 backdrop-blur-sm border border-neutral-800">
+                <div className="flex flex-col">
+                  <div className="p-4 border-b border-neutral-800">
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage src={user?.avatar_url || undefined} alt={user?.email || "User"} />
+                        <AvatarFallback className="bg-neutral-800 text-primary">
+                          {user?.email ? user.email.charAt(0).toUpperCase() : "U"}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col">
+                        <p className="text-sm font-medium">{user?.email?.split('@')[0]}</p>
+                        <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="p-2">
+                    <Link 
+                      href="/profile" 
+                      className="flex items-center gap-2 p-2 text-sm rounded-md hover:bg-accent transition-colors w-full text-left"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                      </svg>
+                      Profile
+                    </Link>
+                    
+                    <Link 
+                      href="/watchlist" 
+                      className="flex items-center gap-2 p-2 text-sm rounded-md hover:bg-accent transition-colors w-full text-left"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+                      </svg>
+                      Watchlist
+                    </Link>
+                    
+                    <button
+                      onClick={() => logout.mutate()}
+                      className="flex items-center gap-2 p-2 text-sm rounded-md hover:bg-accent transition-colors w-full text-left text-red-500"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                      </svg>
+                      Sign Out
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </PopoverContent>
+            </Popover>
           </div>
         ) : (
           <div className="flex items-center gap-2">

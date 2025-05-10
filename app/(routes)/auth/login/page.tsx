@@ -151,7 +151,7 @@ export default function LoginPage() {
                           Password
                         </FormLabel>
                         <Link
-                          href="#"
+                          href="/auth/forgot-password"
                           className="text-xs text-red-500 hover:text-red-400 transition-colors"
                         >
                           Forgot Password?
