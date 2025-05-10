@@ -29,7 +29,7 @@ export const getImageUrl = (
   path: string | null,
   size: string = POSTER_SIZES.medium
 ): string => {
-  if (!path) return '/images/placeholder.png';
+  if (!path) return '/images/placeholder.svg';
   return `${TMDB_IMAGE_BASE_URL}/${size}${path}`;
 };
 
@@ -37,7 +37,7 @@ export const getPosterUrl = (
   path: string | null,
   size: keyof typeof POSTER_SIZES = 'medium'
 ): string => {
-  if (!path) return '/images/poster-placeholder.png';
+  if (!path) return '/images/placeholder.svg';
   return `${TMDB_IMAGE_BASE_URL}/${POSTER_SIZES[size]}${path}`;
 };
 
@@ -45,7 +45,7 @@ export const getBackdropUrl = (
   path: string | null,
   size: keyof typeof BACKDROP_SIZES = 'large'
 ): string => {
-  if (!path) return '/images/backdrop-placeholder.png';
+  if (!path) return '/images/placeholder.svg';
   return `${TMDB_IMAGE_BASE_URL}/${BACKDROP_SIZES[size]}${path}`;
 };
 
@@ -53,6 +53,6 @@ export const getProfileUrl = (
   path: string | null,
   size: keyof typeof PROFILE_SIZES = 'medium'
 ): string => {
-  if (!path) return '/images/profile-placeholder.png';
+  if (!path) return '/images/placeholder.svg';
   return `${TMDB_IMAGE_BASE_URL}/${PROFILE_SIZES[size]}${path}`;
 };
