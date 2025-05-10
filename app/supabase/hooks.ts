@@ -6,6 +6,7 @@ import {
   addToWatchlist,
   removeFromWatchlist,
   getMovieReviews,
+  getUserReviews,
   getUserReview,
   createReview,
   updateReview,
@@ -80,6 +81,17 @@ export const useUserReview = (movieId: number) => {
   return useQuery({
     queryKey: ["userReview", user?.id, movieId],
     queryFn: () => (user ? getUserReview(user.id, movieId) : Promise.resolve(null)),
+    enabled: !!user,
+  });
+};
+
+// Hook to get all reviews by the current user
+export const useUserReviews = () => {
+  const { user } = useAuthStore();
+  
+  return useQuery({
+    queryKey: ["userReviews", user?.id],
+    queryFn: () => (user ? getUserReviews(user.id) : Promise.resolve([])),
     enabled: !!user,
   });
 };

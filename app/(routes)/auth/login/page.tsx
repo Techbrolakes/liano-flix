@@ -65,7 +65,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="h-[93vh] flex flex-col md:flex-row">
+    <div className="min-h-screen flex flex-col md:flex-row">
       {/* Left side - Cinematic backdrop */}
       <div className="hidden md:block md:w-1/2 relative overflow-hidden">
         <div className="absolute inset-0 bg-black/60 z-10" />

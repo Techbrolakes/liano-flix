@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -11,6 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SpinnerIcon } from "@/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { UserReviewsList } from "@/components/profile/UserReviewsList";
 import {
   Form,
   FormControl,
@@ -182,7 +185,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="container max-w-4xl mx-auto py-12 px-4">
+    <div className="container max-w-6xl mx-auto py-12 px-4">
       <h1 className="text-3xl font-bold mb-8">Your Profile</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -261,79 +264,115 @@ export default function ProfilePage() {
         </div>
 
         <div className="md:col-span-2">
-          <div className="bg-card rounded-lg p-6 border border-border">
-            <h2 className="text-xl font-bold mb-6">Edit Profile</h2>
+          <Tabs defaultValue="profile" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="profile" className="text-base">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+                Profile
+              </TabsTrigger>
+              <TabsTrigger value="reviews" className="text-base">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                </svg>
+                Reviews
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="profile" className="mt-0">
+              <div className="bg-card rounded-lg p-6 border border-border">
+                <h2 className="text-xl font-bold mb-6">Edit Profile</h2>
 
-            {error && (
-              <div className="bg-destructive/10 border border-destructive/30 text-destructive px-4 py-3 rounded-lg mb-6 text-sm">
-                {error}
+                {error && (
+                  <div className="bg-destructive/10 border border-destructive/30 text-destructive px-4 py-3 rounded-lg mb-6 text-sm">
+                    {error}
+                  </div>
+                )}
+
+                {success && (
+                  <div className="bg-green-500/10 border border-green-500/30 text-green-500 px-4 py-3 rounded-lg mb-6 text-sm">
+                    {success}
+                  </div>
+                )}
+
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-6"
+                  >
+                    <FormField
+                      control={form.control}
+                      name="username"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Username</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Enter your username"
+                              className="bg-background"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="fullName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Full Name</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Enter your full name"
+                              className="bg-background"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <Button
+                      type="submit"
+                      disabled={isUpdating}
+                      className="w-full sm:w-auto"
+                    >
+                      {isUpdating ? (
+                        <span className="flex items-center">
+                          <SpinnerIcon className="animate-spin mr-2 h-4 w-4" />
+                          Saving...
+                        </span>
+                      ) : (
+                        "Save Changes"
+                      )}
+                    </Button>
+                  </form>
+                </Form>
               </div>
-            )}
-
-            {success && (
-              <div className="bg-green-500/10 border border-green-500/30 text-green-500 px-4 py-3 rounded-lg mb-6 text-sm">
-                {success}
+            </TabsContent>
+            
+            <TabsContent value="reviews" className="mt-0">
+              <div className="bg-card rounded-lg p-6 border border-border">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-bold">Recent Reviews</h2>
+                  <Button asChild>
+                    <Link href="/reviews" className="flex items-center gap-2">
+                      <span>View All Reviews</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                      </svg>
+                    </Link>
+                  </Button>
+                </div>
+                <UserReviewsList limit={3} showViewAllLink={true} />
               </div>
-            )}
-
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6"
-              >
-                <FormField
-                  control={form.control}
-                  name="username"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Username</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter your username"
-                          className="bg-background"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="fullName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Full Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter your full name"
-                          className="bg-background"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <Button
-                  type="submit"
-                  disabled={isUpdating}
-                  className="w-full sm:w-auto"
-                >
-                  {isUpdating ? (
-                    <span className="flex items-center">
-                      <SpinnerIcon className="animate-spin mr-2 h-4 w-4" />
-                      Saving...
-                    </span>
-                  ) : (
-                    "Save Changes"
-                  )}
-                </Button>
-              </form>
-            </Form>
-          </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>

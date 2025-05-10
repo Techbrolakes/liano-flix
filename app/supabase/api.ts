@@ -154,6 +154,35 @@ export const getMovieReviews = async (movieId: number): Promise<Review[]> => {
   }
 };
 
+// Get all reviews by a specific user
+export const getUserReviews = async (userId: string): Promise<Review[]> => {
+  try {
+    const { data, error } = await supabase
+      .from("reviews")
+      .select("*, movie_id")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching user reviews:", error);
+      // Return empty array instead of throwing for permission errors
+      if (error.code === "PGRST301" || error.code === "403" || error.code === "406") {
+        console.warn("Permission or Accept header issue when fetching user reviews:", error);
+        return [];
+      }
+      throw new Error(error.message || 'Unknown error fetching user reviews');
+    }
+
+    return data || [];
+  } catch (err) {
+    console.error("Unexpected error in getUserReviews:", err);
+    if (err instanceof Error) {
+      console.warn("Error details:", err.message);
+    }
+    return [];
+  }
+};
+
 export const getUserReview = async (
   userId: string,
   movieId: number
