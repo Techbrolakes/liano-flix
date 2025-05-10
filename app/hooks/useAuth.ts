@@ -20,7 +20,7 @@ export const useAuth = () => {
     const checkSession = async () => {
       try {
         setIsLoading(true);
-        console.log('Checking session...');
+        console.log("Checking session...");
         const {
           data: { session },
           error,
@@ -30,10 +30,10 @@ export const useAuth = () => {
           throw error;
         }
 
-        console.log('Session check result:', !!session);
+        console.log("Session check result:", !!session);
 
         if (session?.user) {
-          console.log('User authenticated:', session.user.email);
+          console.log("User authenticated:", session.user.email);
           const userData: User = {
             id: session.user.id,
             email: session.user.email || "",
@@ -45,7 +45,7 @@ export const useAuth = () => {
           setUser(userData);
           setIsAuthenticated(true);
         } else {
-          console.log('No active session found');
+          console.log("No active session found");
           setUser(null);
           setIsAuthenticated(false);
         }
@@ -64,8 +64,8 @@ export const useAuth = () => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('Auth state changed:', event, !!session);
-      
+      console.log("Auth state changed:", event, !!session);
+
       if (session?.user) {
         const userData: User = {
           id: session.user.id,
@@ -104,19 +104,19 @@ export const useLogin = () => {
       email: string;
       password: string;
     }) => {
-      console.log('Attempting login for:', email);
+      console.log("Attempting login for:", email);
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) {
-        console.error('Login error:', error.message);
+        console.error("Login error:", error.message);
         throw new Error(error.message);
       }
 
-      console.log('Login successful:', !!data.session);
-      
+      console.log("Login successful:", !!data.session);
+
       // Manually update auth state to ensure it's set immediately
       if (data.user) {
         const userData: User = {
@@ -126,7 +126,7 @@ export const useLogin = () => {
           updated_at: data.user.updated_at || "",
           avatar_url: data.user.user_metadata?.avatar_url,
         };
-        
+
         setUser(userData);
         setIsAuthenticated(true);
       }
@@ -141,17 +141,17 @@ export const useLogin = () => {
 
 export const useOAuthLogin = () => {
   return useMutation({
-    mutationFn: async ({ provider }: { provider: 'google' | 'github' }) => {
-      console.log(`Attempting OAuth login with ${provider}`);
-      
+    mutationFn: async ({ provider }: { provider: "google" | "github" }) => {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-          queryParams: provider === 'google' ? {
-            access_type: 'offline',
-            prompt: 'consent',
-          } : undefined,
+          queryParams:
+            provider === "google"
+              ? {
+                  access_type: "offline",
+                  prompt: "consent",
+                }
+              : undefined,
         },
       });
 
@@ -229,16 +229,19 @@ export const useIsAuthenticated = () => {
 // Helper function to get user profile after OAuth login
 export const useGetUserProfile = () => {
   const { setUser, setIsAuthenticated } = useAuthStore();
-  
+
   return useQuery({
-    queryKey: ['user-profile'],
+    queryKey: ["user-profile"],
     queryFn: async () => {
-      const { data: { user }, error } = await supabase.auth.getUser();
-      
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
       if (error) {
         throw new Error(error.message);
       }
-      
+
       if (user) {
         const userData: User = {
           id: user.id,
@@ -247,12 +250,12 @@ export const useGetUserProfile = () => {
           updated_at: user.updated_at || "",
           avatar_url: user.user_metadata?.avatar_url,
         };
-        
+
         setUser(userData);
         setIsAuthenticated(true);
         return userData;
       }
-      
+
       return null;
     },
     enabled: false, // Don't run automatically
@@ -303,7 +306,7 @@ export const useResetPassword = () => {
 
 export const useUpdatePassword = () => {
   const router = useRouter();
-  
+
   return useMutation({
     mutationFn: async ({ password }: { password: string }) => {
       const { error } = await supabase.auth.updateUser({
