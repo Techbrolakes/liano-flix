@@ -29,9 +29,11 @@ export default function SearchDialog() {
   // Focus input when dialog opens
   useEffect(() => {
     if (isSearchOpen && inputRef.current) {
+      console.log("Search dialog opened, focusing input");
+      // Use a slightly longer timeout to ensure the dialog is fully rendered
       setTimeout(() => {
         inputRef.current?.focus();
-      }, 50);
+      }, 100);
     }
   }, [isSearchOpen]);
 
@@ -39,13 +41,22 @@ export default function SearchDialog() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        console.log("Escape key pressed, closing search dialog");
+        closeSearch();
+      }
+      
+      // Also handle Cmd+K / Ctrl+K to close the dialog if it's already open
+      if (isSearchOpen && (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        console.log("Cmd+K pressed while search is open, closing dialog");
+        e.preventDefault();
         closeSearch();
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [closeSearch]);
+    // Use capture phase to catch events early
+    window.addEventListener("keydown", handleKeyDown, true);
+    return () => window.removeEventListener("keydown", handleKeyDown, true);
+  }, [closeSearch, isSearchOpen]);
 
   // Handle click outside to close
   useEffect(() => {
@@ -84,6 +95,11 @@ export default function SearchDialog() {
     }
   };
 
+  // Add console log for debugging
+  useEffect(() => {
+    console.log("SearchDialog isSearchOpen state:", isSearchOpen);
+  }, [isSearchOpen]);
+  
   if (!isSearchOpen) return null;
 
   return (

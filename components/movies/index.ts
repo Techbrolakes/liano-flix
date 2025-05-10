@@ -6,3 +6,8 @@ export * from "./MovieCard";
 export * from "./MovieRow";
 export * from "./MovieCatalogue";
 export * from "./MovieCarousel";
+export * from "./WatchlistButton";
+export * from "./StarRating";
+export * from "./ReviewForm";
+export * from "./ReviewsList";
+export * from "./ReviewsSection";

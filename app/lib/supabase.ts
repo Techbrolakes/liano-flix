@@ -9,6 +9,12 @@ const supabaseOptions = {
     autoRefreshToken: true,
     detectSessionInUrl: true,
   },
+  global: {
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+  },
 };
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, supabaseOptions);

@@ -9,6 +9,7 @@ import {
   SimilarMoviesSkeleton,
 } from "@/components/skeletons";
 import { MovieCastSection, SimilarMoviesSection } from "@/components/movies";
+import { ReviewsSection } from "@/components/movies/ReviewsSection";
 
 export default function MoviePage({
   params,
@@ -45,6 +46,7 @@ export default function MoviePage({
       <MovieInfo id={movieId} />
       <MovieCastSection id={movieId} />
       <SimilarMoviesSection id={movieId} />
+      <ReviewsSection movieId={movieId} />
     </div>
   );
 }

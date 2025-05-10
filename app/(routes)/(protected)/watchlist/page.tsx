@@ -9,6 +9,8 @@ import { useAuthStore } from "@/app/store/authStore";
 import { SpinnerIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Movie } from "@/app/lib/types";
+import { moviesAPI } from "@/app/lib/api";
+import { WatchlistItem } from "@/app/supabase/types";
 
 export default function WatchlistPage() {
   const router = useRouter();
@@ -33,7 +35,7 @@ export default function WatchlistPage() {
         // Fetch user's watchlist from the database
         const { data, error } = await supabase
           .from("watchlist")
-          .select("movie_id, movie_data")
+          .select("*")
           .eq("user_id", user.id);
 
         if (error) {
@@ -41,9 +43,23 @@ export default function WatchlistPage() {
         }
 
         if (data) {
-          // Extract movie data from the response
-          const movies = data.map((item) => item.movie_data as Movie);
-          setWatchlist(movies);
+          const moviePromises = data.map(async (item: WatchlistItem) => {
+            try {
+              const movieDetails = await moviesAPI.getMovieDetails(
+                item.movie_id
+              );
+              return movieDetails as unknown as Movie;
+            } catch (err) {
+              console.error(`Error fetching movie ${item.movie_id}:`, err);
+              return null;
+            }
+          });
+
+          const moviesData = await Promise.all(moviePromises);
+          // Filter out any null values (failed fetches)
+          setWatchlist(
+            moviesData.filter((movie): movie is Movie => movie !== null)
+          );
         }
       } catch (error: unknown) {
         console.error("Error fetching watchlist:", error);

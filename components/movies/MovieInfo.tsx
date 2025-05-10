@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getBackdropUrl, getPosterUrl } from "@/app/lib/tmdb";
 import { MovieInfoSkeleton } from "@/components/skeletons/MovieDetailsSkeleton";
 import { TrailerButton } from "@/components/common/TrailerButton";
+import { WatchlistButton } from "@/components/movies/WatchlistButton";
 import { useMovieDetails } from "@/app/hooks/useMovieQueries";
 import { Genre } from "@/app/types";
 import { formatCurrency, formatRuntime, formatReleaseDate } from "./utils";
@@ -102,9 +103,10 @@ export function MovieInfo({ id }: { id: number }) {
               <div>{movie.original_language.toUpperCase()}</div>
             </div>
 
-            {/* Trailer Button */}
-            <div className="mb-6">
+            {/* Trailer Button and Watchlist Button */}
+            <div className="flex flex-wrap gap-3 mb-6">
               <TrailerButton videos={movie.videos} />
+              <WatchlistButton movieId={movie.id} />
             </div>
 
             <div className="mb-6">
