@@ -2,11 +2,11 @@
 
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
 import { Providers } from "@/app/providers";
-import TopLoader from "@/components/TopLoader";
-import SmoothScrollProvider from "@/components/SmoothScrollProvider";
+import TopLoader from "@/components/common/TopLoader";
+import SmoothScrollProvider from "@/components/common/SmoothScrollProvider";
 import { satoshi } from "./fonts";
+import Navbar from "@/components/common/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

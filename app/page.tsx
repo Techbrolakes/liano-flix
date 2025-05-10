@@ -1,9 +1,9 @@
 import { Suspense } from "react";
-import { HeroSection } from "../components/HeroSection";
 import { moviesAPI } from "./lib/api";
 import { HeroSkeleton } from "../components/skeletons/HeroSkeleton";
 import { CarouselSkeleton } from "../components/skeletons/CarouselSkeleton";
 import { MovieCarousel } from "@/components/movies";
+import { HeroSection } from "@/components/common/HeroSection";
 
 async function getMovies() {
   try {

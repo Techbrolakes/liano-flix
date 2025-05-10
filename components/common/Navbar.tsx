@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useLogout } from "@/app/hooks/useAuth";
 import { useAuthStore } from "@/app/store/authStore";
-import SearchBar from "./SearchBar";
 import { Button } from "@/components/ui/button";
+import SearchBar from "./SearchBar";
 
 const Navbar = () => {
   const pathname = usePathname();

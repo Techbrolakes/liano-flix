@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getBackdropUrl, getPosterUrl } from "@/app/lib/tmdb";
 import { MovieInfoSkeleton } from "@/components/skeletons/MovieDetailsSkeleton";
-import { TrailerButton } from "@/components/TrailerButton";
+import { TrailerButton } from "@/components/common/TrailerButton";
 import { useMovieDetails } from "@/app/hooks/useMovieQueries";
 import { Genre } from "@/app/types";
 import { formatCurrency, formatRuntime, formatReleaseDate } from "./utils";

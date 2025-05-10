@@ -1,6 +1,6 @@
-import { CastCarousel } from "@/components/CastCarousel";
 import { MovieCastSkeleton } from "@/components/skeletons/MovieDetailsSkeleton";
 import { useMovieCredits } from "@/app/hooks/useMovieQueries";
+import { CastCarousel } from "../common/CastCarousel";
 
 export function MovieCastSection({ id }: { id: number }) {
   const { data: credits, isLoading, error } = useMovieCredits(id);
