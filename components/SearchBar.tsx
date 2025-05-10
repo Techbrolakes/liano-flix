@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useUIStore } from "@/app/store/uiStore";
-import { useSearchMovies } from "@/app/hooks/useMovies";
+import { useSearchMovies } from "@/app/hooks/useMovieQueries";
 import { getPosterUrl } from "@/app/lib/tmdb";
 import Image from "next/image";
 import Link from "next/link";

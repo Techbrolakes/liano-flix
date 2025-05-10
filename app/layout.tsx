@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import { Providers } from "@/app/providers";
 import TopLoader from "@/components/TopLoader";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
+import { satoshi } from "./fonts";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} ${satoshi.variable} antialiased bg-background min-h-screen font-sans`}
       >
         <TopLoader />
         <Providers>
