@@ -110,124 +110,171 @@ export default function WatchlistPage() {
 
   return (
     <div className="container max-w-6xl mx-auto py-12 px-4">
-      <h1 className="text-3xl font-bold mb-8">Your Watchlist</h1>
-
-      {error && (
-        <div className="bg-destructive/10 border border-destructive/30 text-destructive px-4 py-3 rounded-lg mb-6">
-          {error}
-        </div>
-      )}
-
-      {watchlist.length === 0 ? (
-        <div className="bg-card rounded-lg p-8 border border-border text-center">
-          <div className="mb-4">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-16 h-16 mx-auto text-muted-foreground"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h1.5C5.496 19.5 6 18.996 6 18.375m-3.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-1.5A1.125 1.125 0 0118 18.375M20.625 4.5H3.375m17.25 0c.621 0 1.125.504 1.125 1.125M20.625 4.5h-1.5C18.504 4.5 18 5.004 18 5.625m3.75 0v1.5c0 .621-.504 1.125-1.125 1.125M3.375 4.5c-.621 0-1.125.504-1.125 1.125M3.375 4.5h1.5C5.496 4.5 6 5.004 6 5.625m-3.75 0v1.5c0 .621.504 1.125 1.125 1.125m0 0h1.5m-1.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m1.5-3.75C5.496 8.25 6 7.746 6 7.125v-1.5M4.875 8.25C5.496 8.25 6 8.754 6 9.375v1.5m0-5.25v5.25m0-5.25C6 5.004 6.504 4.5 7.125 4.5h9.75c.621 0 1.125.504 1.125 1.125m1.125 2.625h1.5m-1.5 0A1.125 1.125 0 0118 7.125v-1.5m1.125 2.625c-.621 0-1.125.504-1.125 1.125v1.5m2.625-2.625c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-2.625-2.625c0 .621-.504 1.125-1.125 1.125h-1.5m-1.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125h1.5m-1.5-3.75C12 8.754 12.504 8.25 13.125 8.25h1.5m-1.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m1.5-3.75C15.496 8.25 16 7.746 16 7.125v-1.5m0 0h-1.5M16 7.125v1.5c0 .621-.504 1.125-1.125 1.125h-1.5m1.5-3.75C15.496 5.004 16 4.5 16.625 4.5h1.5m0 0h1.5m0 0c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125M18 5.625v5.25M7.125 12h9.75m-9.75 0A1.125 1.125 0 016 10.875M7.125 12C6.504 12 6 12.504 6 13.125m0-2.25C6 11.496 5.496 12 4.875 12M18 10.875c0 .621-.504 1.125-1.125 1.125M18 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m-12 5.25v-5.25m0 5.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125m-12 0v-1.5c0-.621-.504-1.125-1.125-1.125M18 18.375v-5.25m0 5.25v-1.5c0-.621.504-1.125 1.125-1.125M18 13.125v1.5c0 .621.504 1.125 1.125 1.125M18 13.125c0-.621.504-1.125 1.125-1.125M6 13.125v1.5c0 .621-.504 1.125-1.125 1.125M6 13.125C6 12.504 5.496 12 4.875 12m-1.5 0h1.5m-1.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M19.125 12h1.5m0 0c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h1.5m14.25 0h1.5"
-              />
-            </svg>
+      <div className="flex flex-col space-y-6">
+        {/* Header with count */}
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col space-y-1">
+            <div className="flex items-center gap-2 mb-2">
+              <Button 
+                variant="outline" 
+                onClick={() => router.back()}
+                className="rounded-full border-primary/20 hover:bg-primary/5 hover:border-primary/30 flex items-center gap-2 pr-4 pl-3 h-9"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-primary">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                <span className="text-sm font-medium">Back</span>
+              </Button>
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold">Your Watchlist</h1>
+              <p className="text-muted-foreground mt-1">
+                {watchlist.length} {watchlist.length === 1 ? 'movie' : 'movies'} saved to watch later
+              </p>
+            </div>
           </div>
-          <h2 className="text-xl font-semibold mb-2">
-            Your watchlist is empty
-          </h2>
-          <p className="text-muted-foreground mb-6">
-            Start adding movies to your watchlist to keep track of what you want
-            to watch.
-          </p>
-          <Button asChild>
-            <Link href="/movies/popular">Browse Movies</Link>
+          <Button asChild variant="outline" className="gap-2">
+            <Link href="/movies/popular">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+              Add Movies
+            </Link>
           </Button>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {watchlist.map((movie) => (
-            <div
-              key={movie.id}
-              className="bg-card rounded-lg overflow-hidden border border-border group hover:border-primary/50 transition-colors"
-            >
-              <div className="relative aspect-[2/3]">
-                <Link href={`/movies/${movie.id}`}>
-                  {movie.poster_path ? (
-                    <Image
-                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                      alt={movie.title}
-                      fill
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-neutral-800 flex items-center justify-center">
-                      <span className="text-neutral-400">No Image</span>
-                    </div>
-                  )}
-                </Link>
-                <button
-                  onClick={() => removeFromWatchlist(movie.id)}
-                  className="absolute top-2 right-2 bg-black/70 hover:bg-destructive text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                  title="Remove from watchlist"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-5 h-5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
-              <div className="p-4">
-                <Link
-                  href={`/movies/${movie.id}`}
-                  className="hover:text-primary transition-colors"
-                >
-                  <h3 className="font-semibold mb-1 line-clamp-1">
-                    {movie.title}
-                  </h3>
-                </Link>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">
-                    {movie.release_date
-                      ? new Date(movie.release_date).getFullYear()
-                      : "N/A"}
-                  </span>
-                  <div className="flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="w-4 h-4 text-yellow-500 mr-1"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                        clipRule="evenodd"
+
+        {/* Error message */}
+        {error && (
+          <div className="bg-destructive/10 border border-destructive/30 text-destructive px-4 py-3 rounded-lg">
+            <div className="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+              </svg>
+              {error}
+            </div>
+          </div>
+        )}
+
+        {/* Empty state */}
+        {watchlist.length === 0 ? (
+          <div className="bg-gradient-to-br from-card/50 to-card rounded-xl p-10 border border-border text-center shadow-sm">
+            <div className="mb-6 bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-10 h-10 text-primary"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
+                />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-semibold mb-3">
+              Your watchlist is empty
+            </h2>
+            <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+              Start adding movies to your watchlist to keep track of what you want
+              to watch. Your saved movies will appear here.
+            </p>
+            <Button asChild size="lg" className="px-8">
+              <Link href="/movies/popular">Browse Popular Movies</Link>
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {watchlist.map((movie) => (
+              <div
+                key={movie.id}
+                className="bg-card rounded-xl overflow-hidden border border-border group hover:border-primary/50 transition-all duration-300 hover:shadow-md hover:shadow-primary/5"
+              >
+                <div className="relative aspect-[2/3]">
+                  <Link href={`/movies/${movie.id}`}>
+                    {movie.poster_path ? (
+                      <Image
+                        src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                        alt={movie.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
-                    </svg>
-                    <span className="text-sm">
-                      {movie.vote_average.toFixed(1)}
+                    ) : (
+                      <div className="absolute inset-0 bg-neutral-800 flex items-center justify-center">
+                        <span className="text-neutral-400">No Image</span>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </Link>
+                  <div className="absolute top-2 right-2 flex gap-2">
+                    <button
+                      onClick={() => removeFromWatchlist(movie.id)}
+                      className="bg-black/70 hover:bg-destructive text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform hover:scale-110"
+                      title="Remove from watchlist"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-5 h-5"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <Link href={`/movies/${movie.id}`} className="text-white hover:text-primary transition-colors">
+                      <span className="font-medium">View Details</span>
+                    </Link>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <Link
+                    href={`/movies/${movie.id}`}
+                    className="hover:text-primary transition-colors"
+                  >
+                    <h3 className="font-semibold mb-1 line-clamp-1">
+                      {movie.title}
+                    </h3>
+                  </Link>
+                  <div className="flex items-center justify-between mt-1">
+                    <span className="text-sm text-muted-foreground bg-muted px-2 py-0.5 rounded-md">
+                      {movie.release_date
+                        ? new Date(movie.release_date).getFullYear()
+                        : "N/A"}
                     </span>
+                    <div className="flex items-center bg-yellow-500/10 text-yellow-500 px-2 py-0.5 rounded-md">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-4 h-4 mr-1"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <span className="text-sm font-medium">
+                        {movie.vote_average.toFixed(1)}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

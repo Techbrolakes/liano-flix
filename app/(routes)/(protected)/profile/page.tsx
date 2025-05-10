@@ -186,7 +186,21 @@ export default function ProfilePage() {
 
   return (
     <div className="container max-w-6xl mx-auto py-12 px-4">
-      <h1 className="text-3xl font-bold mb-8">Your Profile</h1>
+      <div className="flex flex-col mb-8">
+        <div className="flex items-center gap-2 mb-4">
+          <Button 
+            variant="outline" 
+            onClick={() => router.back()}
+            className="rounded-full border-primary/20 hover:bg-primary/5 hover:border-primary/30 flex items-center gap-2 pr-4 pl-3 h-9"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-primary">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            <span className="text-sm font-medium">Back</span>
+          </Button>
+        </div>
+        <h1 className="text-3xl font-bold">Your Profile</h1>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="md:col-span-1">
