@@ -1,4 +1,4 @@
-# 🎬 LianoFlix
+# 🎬 OlaMax
 
 A Netflix-inspired movie streaming application built with Next.js 14, Tailwind CSS, React Query, and Supabase.
 
@@ -35,8 +35,8 @@ A Netflix-inspired movie streaming application built with Next.js 14, Tailwind C
 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/liano-flix.git
-cd liano-flix
+git clone https://github.com/yourusername/olamax.git
+cd olamax
 ```
 
 2. Install dependencies

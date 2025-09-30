@@ -8,7 +8,11 @@ import { useUIStore } from "@/app/store/uiStore";
 import { useLogout } from "@/app/hooks/useAuth";
 import { supabase } from "@/app/lib/supabase";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Home, Film, User, Search } from "lucide-react";
 import SearchDialog from "./SearchDialog";
@@ -48,31 +52,38 @@ const Navbar = () => {
   const { openSearch } = useUIStore();
   const logout = useLogout();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [profileData, setProfileData] = useState<{ avatar_url: string | null } | null>(null);
+  const [profileData, setProfileData] = useState<{
+    avatar_url: string | null;
+  } | null>(null);
 
   // Fetch current user's profile data
   useEffect(() => {
     const fetchProfileData = async () => {
       if (user?.id) {
         const { data, error } = await supabase
-          .from('profiles')
-          .select('avatar_url')
-          .eq('id', user.id)
+          .from("profiles")
+          .select("avatar_url")
+          .eq("id", user.id)
           .single();
-        
+
         if (data && !error) {
           setProfileData(data);
-          console.log('Profile data fetched:', data);
+          console.log("Profile data fetched:", data);
         }
       }
     };
-    
+
     fetchProfileData();
   }, [user]);
 
   // Debug auth state
   useEffect(() => {
-    console.log("Navbar auth state:", { isAuthenticated, isLoading, user, profileData });
+    console.log("Navbar auth state:", {
+      isAuthenticated,
+      isLoading,
+      user,
+      profileData,
+    });
   }, [isAuthenticated, isLoading, user, profileData]);
 
   // Handle keyboard shortcut for search
@@ -187,7 +198,11 @@ const Navbar = () => {
                     <button className="flex items-center gap-2 focus:outline-none p-1 rounded-full hover:bg-primary/10 transition-colors">
                       <Avatar className="h-8 w-8 border-2 border-primary/30 hover:border-primary transition-colors ring-2 ring-background">
                         <AvatarImage
-                          src={profileData?.avatar_url || user?.avatar_url || undefined}
+                          src={
+                            profileData?.avatar_url ||
+                            user?.avatar_url ||
+                            undefined
+                          }
                           alt={user?.email || "User"}
                           className="object-cover"
                         />
@@ -219,7 +234,11 @@ const Navbar = () => {
                         <div className="flex items-center gap-3">
                           <Avatar className="h-12 w-12 border-2 border-primary/30 ring-2 ring-background hover:border-primary transition-colors">
                             <AvatarImage
-                              src={profileData?.avatar_url || user?.avatar_url || undefined}
+                              src={
+                                profileData?.avatar_url ||
+                                user?.avatar_url ||
+                                undefined
+                              }
                               alt={user?.email || "User"}
                               className="object-cover"
                             />
@@ -335,9 +354,9 @@ const Navbar = () => {
 
                         <button
                           onClick={() => logout.mutate()}
-                          className="flex items-center gap-3 p-2.5 text-sm rounded-lg hover:bg-red-500/10 transition-colors w-full text-left text-red-500 group"
+                          className="flex items-center gap-3 p-2.5 text-sm rounded-lg hover:bg-red-500/10 transition-colors w-full text-left text-purple-500 group"
                         >
-                          <div className="w-8 h-8 rounded-full flex items-center justify-center bg-red-500/10 text-red-500 group-hover:bg-red-500/20 transition-colors">
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center bg-red-500/10 text-purple-500 group-hover:bg-red-500/20 transition-colors">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -355,7 +374,7 @@ const Navbar = () => {
                           </div>
                           <div className="flex flex-col">
                             <span className="font-medium">Sign Out</span>
-                            <span className="text-xs text-red-500/70">
+                            <span className="text-xs text-purple-500/70">
                               Log out of your account
                             </span>
                           </div>
@@ -378,7 +397,7 @@ const Navbar = () => {
                 <Button
                   size="sm"
                   asChild
-                  className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 hover:bg-primary/90 text-white shadow-md hover:shadow-lg hover:shadow-primary/20 transition-all duration-200 rounded-full px-5 font-medium"
+                  className="bg-gradient-to-r from-purple-600 via-violet-600 to-pink-500 hover:from-purple-500 hover:via-violet-500 hover:to-pink-400 text-white shadow-md hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-200 rounded-full px-5 font-medium"
                 >
                   <Link href="/auth/signup">Sign Up</Link>
                 </Button>

@@ -87,7 +87,7 @@ export default function GenrePage() {
           <button
             onClick={loadMoreMovies}
             disabled={loadingMore}
-            className="px-6 py-3 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 hover:bg-primary/90 text-white rounded-md flex items-center gap-2 disabled:opacity-50"
+            className="px-6 py-3 bg-gradient-to-r from-purple-600 via-violet-600 to-pink-500 hover:from-purple-500 hover:via-violet-500 hover:to-pink-400 hover:bg-primary/90 text-white rounded-md flex items-center gap-2 disabled:opacity-50"
           >
             {loadingMore ? (
               <>

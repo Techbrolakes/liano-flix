@@ -47,12 +47,14 @@ export default function UpdatePasswordPage() {
 
   const onSubmit = (data: UpdatePasswordFormData) => {
     setError(null);
-    
+
     updatePassword(
       { password: data.password },
       {
         onError: (err) => {
-          setError(err.message || "Failed to update password. Please try again.");
+          setError(
+            err.message || "Failed to update password. Please try again."
+          );
         },
       }
     );
@@ -62,26 +64,22 @@ export default function UpdatePasswordPage() {
     <div className="h-[93vh] flex items-center justify-center bg-black/95">
       <div className="w-full max-w-md p-8 backdrop-blur-sm bg-black/40 rounded-2xl border border-white/10 shadow-[0_0_15px_rgba(255,0,0,0.15)]">
         <div className="text-center mb-6">
-          <h1 className="font-satoshi text-3xl font-bold mb-2">
-            <span className="text-red-500">Liano</span>Flix
-          </h1>
-          <h2 className="text-2xl font-bold mb-2 text-white">Update Password</h2>
+          <h2 className="text-2xl font-bold mb-2 text-white">
+            Update Password
+          </h2>
           <p className="text-neutral-400 text-sm mb-6">
             Create a new password for your account.
           </p>
         </div>
 
         {error && (
-          <div className="bg-red-500/10 border border-red-500/50 text-red-500 px-4 py-3 rounded-lg mb-6 text-sm">
+          <div className="bg-red-500/10 border border-red-500/50 text-purple-500 px-4 py-3 rounded-lg mb-6 text-sm">
             {error}
           </div>
         )}
 
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-5"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             <FormField
               control={form.control}
               name="password"
@@ -103,7 +101,7 @@ export default function UpdatePasswordPage() {
                       />
                     </div>
                   </FormControl>
-                  <FormMessage className="text-red-500" />
+                  <FormMessage className="text-purple-500" />
                 </FormItem>
               )}
             />
@@ -129,7 +127,7 @@ export default function UpdatePasswordPage() {
                       />
                     </div>
                   </FormControl>
-                  <FormMessage className="text-red-500" />
+                  <FormMessage className="text-purple-500" />
                 </FormItem>
               )}
             />
@@ -137,7 +135,7 @@ export default function UpdatePasswordPage() {
             <Button
               type="submit"
               disabled={isPending}
-              className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 text-white font-medium py-2.5 rounded-lg transition-all duration-300 shadow-lg hover:shadow-red-500/20"
+              className="w-full bg-gradient-to-r from-purple-600 via-violet-600 to-pink-500 hover:from-purple-500 hover:via-violet-500 hover:to-pink-400 text-white font-medium py-2.5 rounded-lg transition-all duration-300 shadow-lg hover:shadow-red-500/20"
             >
               {isPending ? (
                 <span className="flex items-center justify-center">

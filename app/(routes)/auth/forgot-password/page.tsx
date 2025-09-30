@@ -39,7 +39,7 @@ export default function ForgotPasswordPage() {
 
   const onSubmit = (data: ForgotPasswordFormData) => {
     setError(null);
-    
+
     resetPassword(
       { email: data.email },
       {
@@ -47,7 +47,9 @@ export default function ForgotPasswordPage() {
           setSuccess(true);
         },
         onError: (err) => {
-          setError(err.message || "Failed to send reset email. Please try again.");
+          setError(
+            err.message || "Failed to send reset email. Please try again."
+          );
         },
       }
     );
@@ -57,35 +59,45 @@ export default function ForgotPasswordPage() {
     <div className="h-[93vh] flex items-center justify-center bg-black/95">
       <div className="w-full max-w-md p-8 backdrop-blur-sm bg-black/40 rounded-2xl border border-white/10 shadow-[0_0_15px_rgba(255,0,0,0.15)]">
         <div className="text-center mb-6">
-          <h1 className="font-satoshi text-3xl font-bold mb-2">
-            <span className="text-red-500">Liano</span>Flix
-          </h1>
           <h2 className="text-2xl font-bold mb-2 text-white">Reset Password</h2>
           <p className="text-neutral-400 text-sm mb-6">
-            Enter your email address and we&apos;ll send you a link to reset your password.
+            Enter your email address and we&apos;ll send you a link to reset
+            your password.
           </p>
         </div>
 
         {success ? (
           <div className="bg-green-500/10 border border-green-500/50 text-green-500 px-4 py-6 rounded-lg mb-6 text-center">
             <div className="flex justify-center mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-12 h-12"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
             </div>
             <p className="mb-4">
               Password reset link sent! Check your email inbox.
             </p>
-            <Button asChild className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 text-white w-full">
-              <Link href="/auth/login">
-                Return to Login
-              </Link>
+            <Button
+              asChild
+              className="bg-gradient-to-r from-purple-600 via-violet-600 to-pink-500 hover:from-purple-500 hover:via-violet-500 hover:to-pink-400 text-white w-full"
+            >
+              <Link href="/auth/login">Return to Login</Link>
             </Button>
           </div>
         ) : (
           <>
             {error && (
-              <div className="bg-red-500/10 border border-red-500/50 text-red-500 px-4 py-3 rounded-lg mb-6 text-sm">
+              <div className="bg-red-500/10 border border-red-500/50 text-purple-500 px-4 py-3 rounded-lg mb-6 text-sm">
                 {error}
               </div>
             )}
@@ -115,7 +127,7 @@ export default function ForgotPasswordPage() {
                           />
                         </div>
                       </FormControl>
-                      <FormMessage className="text-red-500" />
+                      <FormMessage className="text-purple-500" />
                     </FormItem>
                   )}
                 />
@@ -123,7 +135,7 @@ export default function ForgotPasswordPage() {
                 <Button
                   type="submit"
                   disabled={isPending}
-                  className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 text-white font-medium py-2.5 rounded-lg transition-all duration-300 shadow-lg hover:shadow-red-500/20"
+                  className="w-full bg-gradient-to-r from-purple-600 via-violet-600 to-pink-500 hover:from-purple-500 hover:via-violet-500 hover:to-pink-400 text-white font-medium py-2.5 rounded-lg transition-all duration-300 shadow-lg hover:shadow-red-500/20"
                 >
                   {isPending ? (
                     <span className="flex items-center justify-center">
@@ -140,7 +152,7 @@ export default function ForgotPasswordPage() {
                     Remember your password?{" "}
                     <Link
                       href="/auth/login"
-                      className="text-red-500 hover:text-red-400 font-medium transition-colors"
+                      className="text-purple-500 hover:text-red-400 font-medium transition-colors"
                     >
                       Sign in
                     </Link>

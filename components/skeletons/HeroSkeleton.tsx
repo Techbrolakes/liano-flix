@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 
 export const HeroSkeleton = () => {
   return (
@@ -11,17 +11,17 @@ export const HeroSkeleton = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-neutral-900 to-neutral-800 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-neutral-700/20 to-transparent skeleton-shine"></div>
         </div>
-        
+
         {/* Enhanced mobile gradient overlays */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/40" />
       </div>
-      
+
       {/* Larger screens: Backdrop skeleton with shimmer effect (hidden on mobile) */}
       <div className="absolute inset-0 hidden md:block">
         <div className="absolute inset-0 bg-gradient-to-br from-neutral-900 to-neutral-800 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-neutral-700/20 to-transparent skeleton-shine"></div>
         </div>
-        
+
         {/* Enhanced gradient overlays for larger screens */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent" />
@@ -32,7 +32,7 @@ export const HeroSkeleton = () => {
         <div className="max-w-xs sm:max-w-sm md:max-w-xl lg:max-w-2xl mx-auto md:mx-0">
           {/* Title skeleton */}
           <div className="h-7 sm:h-9 md:h-10 lg:h-14 w-3/4 bg-gradient-to-r from-neutral-800 to-neutral-700 rounded-md mb-2 md:mb-3"></div>
-          
+
           {/* Info row skeleton */}
           <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-3 md:mb-4">
             <div className="h-4 sm:h-5 w-24 sm:w-32 bg-gradient-to-r from-neutral-800 to-neutral-700 rounded-md"></div>
@@ -47,12 +47,12 @@ export const HeroSkeleton = () => {
             <div className="md:hidden">
               <div className="h-16 bg-gradient-to-r from-neutral-800 to-neutral-700 rounded-md p-2 backdrop-blur-sm bg-black/30"></div>
             </div>
-            
+
             {/* Tablet overview skeleton */}
             <div className="hidden sm:block md:hidden">
               <div className="h-20 bg-gradient-to-r from-neutral-800 to-neutral-700 rounded-md p-2 backdrop-blur-sm bg-black/20"></div>
             </div>
-            
+
             {/* Desktop overview skeleton */}
             <div className="hidden md:block space-y-2">
               <div className="h-5 bg-gradient-to-r from-neutral-800 to-neutral-700 rounded-md"></div>
@@ -63,7 +63,7 @@ export const HeroSkeleton = () => {
 
           {/* Action buttons skeleton */}
           <div className="flex flex-wrap gap-2 sm:gap-3">
-            <div className="h-9 sm:h-10 md:h-12 w-28 sm:w-32 md:w-36 rounded-md bg-gradient-to-r from-red-700 to-red-600 relative overflow-hidden">
+            <div className="h-9 sm:h-10 md:h-12 w-28 sm:w-32 md:w-36 rounded-md bg-gradient-to-r from-purple-600 via-violet-600 to-pink-500 hover:from-purple-500 hover:via-violet-500 hover:to-pink-400  relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/20 to-transparent skeleton-shine"></div>
             </div>
             <div className="h-9 sm:h-10 md:h-12 w-28 sm:w-32 md:w-36 rounded-md bg-gradient-to-r from-neutral-800 to-neutral-700 relative overflow-hidden">

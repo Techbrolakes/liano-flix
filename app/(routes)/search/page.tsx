@@ -40,7 +40,7 @@ function SearchContent() {
   const people = peopleData?.results || [];
 
   useEffect(() => {
-    document.title = `Search: ${query} - LianoFlix`;
+    document.title = `Search: ${query} - OlaMax`;
   }, [query]);
 
   if (!query) {
@@ -49,7 +49,7 @@ function SearchContent() {
         <div className="container mx-auto px-4 py-20">
           <div className="text-center py-20">
             <h1 className="text-3xl font-bold text-white mb-4">
-              Search LianoFlix
+              Search OlaMax
             </h1>
             <p className="text-neutral-400">
               Enter a search term to find movies and actors.
@@ -167,7 +167,7 @@ function SearchContent() {
                         className="object-cover group-hover:scale-105 transition duration-300"
                       />
                     </div>
-                    <h3 className="text-sm font-medium text-white group-hover:text-red-500 transition line-clamp-1">
+                    <h3 className="text-sm font-medium text-white group-hover:text-purple-500 transition line-clamp-1">
                       {person.name}
                     </h3>
                     {person.known_for_department && (

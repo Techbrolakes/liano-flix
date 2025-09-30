@@ -221,7 +221,7 @@ export const HeroCarousel = ({ movies }: HeroCarouselProps) => {
               <div className="flex flex-wrap gap-2 sm:gap-3">
                 <Link
                   href={`/movies/${movie.id}`}
-                  className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 px-4 sm:px-6 py-2 sm:py-3 bg-primary hover:bg-primary/90 transition text-white text-sm sm:text-base font-medium rounded-md flex items-center gap-1 sm:gap-2"
+                  className="bg-gradient-to-r from-purple-600 via-violet-600 to-pink-500 hover:from-purple-500 hover:via-violet-500 hover:to-pink-400 px-4 sm:px-6 py-2 sm:py-3 bg-primary hover:bg-primary/90 transition text-white text-sm sm:text-base font-medium rounded-md flex items-center gap-1 sm:gap-2"
                 >
                   <Play className="w-4 h-4 sm:w-5 sm:h-5" />
                   Watch Now

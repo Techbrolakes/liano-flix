@@ -14,7 +14,7 @@ export function ActorInfo({ id }: { id: number }) {
   if (error || !person) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <p className="text-red-500">Error loading actor details</p>
+        <p className="text-purple-500">Error loading actor details</p>
       </div>
     );
   }

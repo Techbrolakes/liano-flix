@@ -18,7 +18,7 @@ export function MovieInfo({ id }: { id: number }) {
   if (error || !movie) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <p className="text-red-500">Error loading movie details</p>
+        <p className="text-purple-500">Error loading movie details</p>
       </div>
     );
   }

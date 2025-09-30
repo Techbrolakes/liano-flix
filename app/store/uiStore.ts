@@ -40,7 +40,7 @@ export const useUIStore = create<UIState>()(
       },
     }),
     {
-      name: 'lianoflix-ui-storage',
+      name: 'olamax-ui-storage',
     }
   )
 );

@@ -52,7 +52,7 @@ export default function ScrollProgressBar() {
     <div className="absolute bottom-0 left-0 w-full h-0.5 bg-transparent z-50">
       <div 
         ref={progressBarRef}
-        className="h-full bg-gradient-to-r from-primary to-red-500"
+        className="h-full bg-gradient-to-r from-primary to-purple-500"
         style={{ width: `${scrollProgress}%` }}
       />
     </div>

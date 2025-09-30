@@ -83,7 +83,7 @@ export function ActorCatalogue({
                   />
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-3 z-20 transform translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                  <span className="text-xs font-medium px-2 py-1 rounded-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 hover:bg-primary/80 text-white inline-block">
+                  <span className="text-xs font-medium px-2 py-1 rounded-full bg-gradient-to-r from-purple-600 via-violet-600 to-pink-500 hover:from-purple-500 hover:via-violet-500 hover:to-pink-400 hover:bg-primary/80 text-white inline-block">
                     View Profile
                   </span>
                 </div>
@@ -113,7 +113,7 @@ export function ActorCatalogue({
           <Button
             onClick={() => fetchNextPage()}
             disabled={isFetchingNextPage}
-            className="px-6 py-2 h-auto bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 text-white rounded-full border-none shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-2"
+            className="px-6 py-2 h-auto bg-gradient-to-r from-purple-600 via-violet-600 to-pink-500 hover:from-purple-500 hover:via-violet-500 hover:to-pink-400 text-white rounded-full border-none shadow-md hover:shadow-lg transition-all duration-300 flex items-center gap-2"
           >
             {isFetchingNextPage ? (
               <>
